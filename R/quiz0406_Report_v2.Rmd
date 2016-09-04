@@ -1,0 +1,116 @@
+---
+title: "Quiz 160406v2"
+author: "coop711"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+# install.packages("pander", repos = "https://cran.rstudio.com")
+# install.packages("xlsx", repos = "https://cran.rstudio.com")
+library(xlsx)
+library(pander)
+library(knitr)
+panderOptions('table.split.table', Inf)
+panderOptions('table.alignment.rownames', 'left')
+panderOptions('table.alignment.default', 'right')
+options(width = 180)
+```
+
+```{r, data, echo = FALSE, results = 'hide'}
+quiz0406 <- read.xlsx("../data/quiz0406v2.xlsx", 1, startRow = 3, endRow = 67, colIndex = c(3:7, 9:20), colClasses = c(rep("character", 11)), stringsAsFactors = FALSE)
+str(quiz0406)
+names(quiz0406) <- c("dept", "id", "name", "year", "e.mail", "cell.no", "E1", "E2", "E3", "Q1", "Q2", "Q3A", "Q3B", "Q4", "E4", "E5", "group")
+quiz0406$dept <- factor(quiz0406$dept)
+quiz0406$year <- factor(quiz0406$year)
+quiz0406$group <- factor(quiz0406$group, levels = c("Red", "Black"))
+quiz0406$Q1 <- factor(quiz0406$Q1, levels = c("1", "2", "3", "4", "5", "6"), labels = c("I", "II", "III", "IV", "기타정당", "없거나 모르겠다"))
+quiz0406$Q2 <- factor(quiz0406$Q2, levels = c("1", "2", "3", "4", "5"), labels = c("잘하는 편이다", "매우 잘하고 있다", "잘못하는 편이다", "매우 잘못하고 있다", "잘모르겠다"))
+quiz0406$Q3A <- factor(quiz0406$Q3A, levels = 1:14, labels = c(LETTERS[1:13], "기타 또는 없다"))
+quiz0406$Q3B.2 <- quiz0406$Q3B
+quiz0406$Q3B.2 <- ifelse(quiz0406$Q3B <= 13, 14 - quiz0406$Q3B, quiz0406$Q3B)
+quiz0406$Q3B.2 <- factor(quiz0406$Q3B.2, levels = 1:14, labels = c(LETTERS[1:13], "기타 또는 없다"))
+quiz0406$Q4 <- factor(quiz0406$Q4, levels = 1:5, labels = c("전혀 없다", "별로 없다", "가능하면 한다", "반드시 한다", "잘 모르겠다"))
+str(quiz0406)
+```
+
+```{r, wrong data detect, echo = FALSE, results='hide'}
+cbind(is.na(quiz0406$Q3B), quiz0406$group == "Red")
+quiz0406[c("name", "Q3B", "group")][!is.na(quiz0406$Q3B) & quiz0406$group == "Red", ]
+```
+
+```{r, randomization, echo = FALSE, results = 'hide'}
+pander(summary(quiz0406))
+```
+
+## 퀴즈 응답 비교
+
+#### Q1. 정당지지도
+
+```{r, party preference, echo = FALSE}
+pander(addmargins(table(quiz0406$group, quiz0406$Q1, exclude = NULL), margin=1))
+```
+
+#### Q1. 정당지지도(%)
+
+```{r, party preference in percentage, echo = FALSE}
+pander(round(prop.table(addmargins(table(quiz0406$group, quiz0406$Q1, exclude = NULL), margin=1), margin=1)[4,]*100, digits=1))
+```
+
+#### Q2. 국정수행 지지도
+
+```{r, presidential performance support, echo = FALSE}
+pander(addmargins(table(quiz0406$group, quiz0406$Q2, exclude = NULL), margin=1))
+```
+
+#### Q2. 국정수행 지지도(%)
+
+```{r, presidential performance support in percentage, echo = FALSE}
+pander(round(prop.table(addmargins(table(quiz0406$group, quiz0406$Q2, exclude = NULL), margin=1), margin=1)[4,]*100, digits=1), caption="국정수행 지지도")
+```
+
+#### Q3A. 여야 차기 대선후보 지지도
+
+```{r, next president, echo = FALSE}
+pander(addmargins(table(quiz0406$group, quiz0406$Q3A, exclude = NULL), margin=1))
+```
+
+#### Q3A. 여야 차기 대선후보 지지도(%)
+
+```{r, next president in percentage, echo = FALSE}
+pander(round(prop.table(addmargins(table(quiz0406$group, quiz0406$Q3A, exclude = NULL), margin = 1), margin = 1)[4,]*100, digits = 1), caption = "후보 지지도")
+```
+
+#### Q3B. Black 만 문항 순서를 바꾸었을 때
+
+##### Black은 Q3A에서 순서만 바꾼 것인데 답이 다르게 나옴. 
+
+```{r, order change, echo = FALSE}
+pander(table(quiz0406$group, quiz0406$Q3B.2, exclude = NULL), caption="후보지지도")
+```
+
+##### Q3A와 Q3B의 Black만 비교
+
+```{r, black and black, echo = FALSE}
+black.black <- rbind(table(quiz0406$group, quiz0406$Q3A, exclude = NULL)[2, ], table(quiz0406$group, quiz0406$Q3B.2, exclude = NULL)[2, ])
+row.names(black.black) <- c("Black(Q3A)", "Black(Q3B)")
+pander(addmargins(black.black, margin = 2))
+```
+
+#### Q4. 투표의향
+
+```{r, vote will, echo = FALSE}
+pander(addmargins(table(quiz0406$group, quiz0406$Q4, exclude = NULL), margin=1), caption="투표 의향")
+```
+
+#### Q4. 투표의향(%)  
+
+```{r, vote will in percentage, echo = FALSE}
+pander(round(prop.table(addmargins(table(quiz0406$group, quiz0406$Q4, exclude = NULL), margin=1), margin=1)[4,]*100, digits=1))
+```
+
+
+```{r, save, echo = FALSE}
+# save.image("../R/quiz0406.rda")
+```

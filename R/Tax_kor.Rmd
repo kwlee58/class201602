@@ -1,0 +1,98 @@
+---
+title: "Tax Korea"
+author: "coop711"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+# install.packages("pander", repos = "https://cran.rstudio.com")
+# install.packages("xlsx", repos = "https://cran.rstudio.com")
+library(xlsx)
+library(pander)
+library(knitr)
+panderOptions('table.split.table', Inf)
+panderOptions('table.alignment.rownames', 'left')
+panderOptions('table.alignment.default', 'right')
+options(width=180)
+```
+
+<!--## Tax Data-->
+
+```{r, data, echo = FALSE}
+load("./tax_kr.RData")
+year <- 1994:2014
+year.local <- 1994:2013
+tax.2 <- round(tax[, -1]/1000000, digits = 1)
+tax_summary.2 <- round(tax_summary[, -1]/1000000, digits = 1)
+local_tax.2 <- round(local_tax/1000000000, digits = 1)
+tax_portion <- round(tax_summary.2[, c(2, 10)]/tax_summary.2[, 1]*100, digits = 1)
+names(tax_portion) <- c("국세비중_백분율", "지방세비중_백분율")
+```
+
+## 국세와 지방세
+
+```{r, tax 1, echo = FALSE}
+kable(data.frame("연도" = year, tax_summary.2[, c(1:2, 10)], tax_portion))
+```
+
+## 국세
+
+```{r, tax 2, echo = FALSE}
+kable(data.frame("연도" = year, tax.2[, c(1:2, 15:20)]))
+```
+
+## 내국세
+
+```{r, tax 3, echo = FALSE}
+kable(data.frame("연도" = year, tax.2[, c(2, 7, 13:14)]))
+```
+
+## 직접세
+
+```{r, tax 4, echo = FALSE}
+kable(data.frame("연도" = year, tax.2[, c(7, 3:6)]))
+```
+
+## 간접세
+
+```{r, tax 5, echo = FALSE}
+kable(data.frame("연도" = year, tax.2[, c(13, 8:12)]))
+```
+
+
+## 국세 전체
+
+```{r, total, echo = FALSE, results = 'markup'}
+kable(data.frame("연도"= year, tax.2), align = rep('r', 21))
+```
+
+## 조세 총괄
+
+```{r, tax summary, echo = FALSE, results = 'markup'}
+kable(data.frame("연도" = year, tax_summary.2), align = rep('r', 11))
+```
+
+## 지방세(시군)
+
+```{r, local tax county, echo = FALSE}
+kable(data.frame("연도" = year.local, "시군" = rowSums(local_tax.2[, c(7, 3, 22, 8, 20)]), local_tax.2[, c(7, 3, 22, 8, 20)]))
+```
+
+## 지방세(시도)
+
+```{r, local tax province, echo = FALSE}
+kable(data.frame("연도" = year.local, "시도" = rowSums(local_tax.2[, c(15, 21, 17, 6, 2)]), local_tax.2[, c(15, 21, 17, 6, 2)]))
+```
+
+## 지방세(천억 이상)
+
+```{r, local tax summary, echo = FALSE}
+kable(data.frame("연도" = year.local, local_tax.2[, c(1:3, 6:8, 15, 17, 20:23)]))
+```
+## 지방세 전체
+
+```{r, local tax, echo = FALSE}
+kable(data.frame("연도" = year.local, local_tax.2))
+```

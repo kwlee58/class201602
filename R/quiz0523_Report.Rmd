@@ -1,0 +1,172 @@
+---
+title: "Quiz 160523"
+author: "coop711"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+# install.packages("pander", repos = "https://cran.rstudio.com")
+# install.packages("xlsx", repos = "https://cran.rstudio.com")
+library(xlsx)
+library(pander)
+library(knitr)
+panderOptions('table.split.table', Inf)
+panderOptions('table.alignment.rownames', 'left')
+panderOptions('table.alignment.default', 'right')
+options(width = 180)
+```
+
+```{r, data, echo = FALSE, results = 'hide'}
+quiz0523 <- read.xlsx("../data/quiz0523v2.xlsx", 1, startRow = 2, endRow = 66, colIndex = c(3:7, 9:14), colClasses = c(rep("character", 11)), stringsAsFactors = FALSE)
+str(quiz0523)
+names(quiz0523) <- c("dept", "id", "name", "year", "e.mail", "cell.no", "Q1", "Q2", "Q3", "Q4", "group")
+quiz0523$dept <- factor(quiz0523$dept)
+quiz0523$year <- factor(quiz0523$year)
+quiz0523$group <- factor(quiz0523$group, levels = c("Red", "Black"))
+quiz0523$Q1
+# strsplit(quiz0523$Q1, ",")
+BFI.strsplit <- strsplit(quiz0523$Q1, ",")
+# str(BFI.strsplit)
+# BFI.first <- mapply(function(x) sapply(x, substr, 1, 1), BFI.strsplit)
+# BFI.str.collapse <- mapply(function(x) paste(x, sep ="", collapse = ""), BFI.strsplit)
+# BFI.replies <- mapply(function(x) substring(x, first = c(1, 4, 7, 10, 13), last = c(1, 4, 7, 10, 13)), BFI.str.collapse)
+BFI.ans <- strsplit("개방성,성실성,외향성,친화성,신경성", split = ",")
+BFI.count <- mapply(function(x) ifelse(x == unlist(BFI.ans), 1, 0), BFI.strsplit)
+# BFI.count <- mapply(function(x) ifelse(x == unlist(BFI.ans), 1, 0), BFI.first)
+# BFI.count <- mapply(function(x) ifelse(x == unlist(BFI.ans), 1, 0), data.frame(BFI.replies))
+BFI.score <- apply(BFI.count, 2, sum)
+quiz0523$Q2[49]
+MI.strsplit <- strsplit(quiz0523$Q2, ",")
+# str(MI.strsplit)
+# MI.first <- mapply(function(x) sapply(x, substr, 1, 1), MI.strsplit)
+# MI.str.collapse <- mapply(function(x) paste(x, sep ="", collapse = ""), MI.strsplit)
+# MI.replies <- mapply(function(x) substring(x, first = c(1, 4, 7, 10, 13), last = c(1, 4, 7, 10, 13)), MI.str.collapse)
+MI.strsplit[[49]]
+MI.ans <- strsplit("신체운동,음악,공간,자기성찰,자연친화,논리수학,언어,인간친화", split = ",")
+MI.count <- mapply(function(x) ifelse(x == unlist(MI.ans), 1, 0), MI.strsplit)
+# MI.count <- mapply(function(x) ifelse(x == unlist(MI.ans), 1, 0), data.frame(MI.replies))
+MI.score <- apply(MI.count, 2, sum)
+Black <- quiz0523$group == "Black"
+Red <- quiz0523$group == "Red"
+# quiz0523$Q4.2[quiz0523$group == "Black" & quiz0523$Q4 == "가"] <- "400명은 죽는다"
+# quiz0523$Q4.2[quiz0523$group == "Black" & quiz0523$Q4 == "나"] <- "모두 사망 않을 확률 1/3"
+# quiz0523$Q4.2[quiz0523$group == "Red" & quiz0523$Q4 == "가"] <- "200명은 살린다"
+# quiz0523$Q4.2[quiz0523$group == "Red" & quiz0523$Q4 == "나"] <- "모두 살릴 확률 1/3"
+# quiz0523$Q4.2 <- quiz0523$Q4
+quiz0523$Q3.2[Red] <- ifelse(quiz0523$Q3[Red] == "가", "티켓 분실", ifelse(quiz0523$Q3[Red] == "나", "티켓 분실", NA))
+quiz0523$Q3.2[Black] <- ifelse(quiz0523$Q3[Black] == "가", "현금 분실", ifelse(quiz0523$Q3[Black] == "나", "현금 분실", NA))
+quiz0523$Q3.3[Red] <- ifelse(quiz0523$Q3[Red] == "가", "산다", ifelse(quiz0523$Q3[Red] == "나", "안 산다", NA))
+quiz0523$Q3.3[Black] <- ifelse(quiz0523$Q3[Black] == "가", "산다", ifelse(quiz0523$Q3[Black] == "나", "안 산다", NA))
+# quiz0523$Q3.2 <- factor(quiz0523$Q3.2, levels = c("실업률10%(취업률90%), 인플레12%", "실업률5%(취업률95%), 인플레17%"))
+quiz0523$Q4.2[Red] <- ifelse(quiz0523$Q4[Red] == "가", "현금 분실", ifelse(quiz0523$Q4[Red] == "나", "현금 분실", NA))
+quiz0523$Q4.2[Black] <- ifelse(quiz0523$Q4[Black] == "가", "티켓 분실", ifelse(quiz0523$Q4[Black] == "나", "티켓 분실", NA))
+quiz0523$Q4.3[Red] <- ifelse(quiz0523$Q4[Red] == "가", "산다", ifelse(quiz0523$Q4[Red] == "나", "안 산다", NA))
+quiz0523$Q4.3[Black] <- ifelse(quiz0523$Q4[Black] == "가", "산다", ifelse(quiz0523$Q4[Black] == "나", "안 산다", NA))
+# quiz0523$Q4.2 <- factor(quiz0523$Q4.2, levels = c("수용가능", "불공정"))
+# str(quiz0523)
+pander(quiz0523[c("Q3", "Q3.2", "Q3.3", "Q4", "Q4.2", "Q4.3", "group")])
+```
+
+```{r, randomization, echo = FALSE, results = 'hide'}
+pander(summary(quiz0523))
+```
+
+### 퀴즈 응답
+
+#### BFI 줄 긋기
+
+##### 몇 개나 맞추나?
+
+```{r, BFI, echo = FALSE}
+BFI.tbl <- table(quiz0523$group, BFI.score, useNA = "ifany")
+BFI.tbl.a <- addmargins(BFI.tbl)
+rownames(BFI.tbl.a)[3] <- "계" 
+colnames(BFI.tbl.a)[5] <- "계"
+pander(BFI.tbl.a)
+```
+
+##### 몇 개나 맞추나? (%)
+
+```{r, BFi percentage, echo = FALSE}
+BFI.tbl.p <- round(prop.table(table(BFI.score))*100, digits = 2)
+BFI.tbl.a.m <- addmargins(BFI.tbl.p, margin = 1)
+names(BFI.tbl.a.m)[4] <- "계"
+pander(BFI.tbl.a.m, caption = "Big Five Inventory")
+```
+
+#### 다중 지능
+
+##### 몇 개나 맞추나?
+
+```{r, MI, echo = FALSE}
+MI.score.tbl <- table(quiz0523$group, "맞춘 갯수" = MI.score)
+MI.score.tbl.a <- addmargins(MI.score.tbl)
+rownames(MI.score.tbl.a)[3] <- "계"
+colnames(MI.score.tbl.a)[5] <- "계"
+pander(MI.score.tbl.a)
+```
+
+##### 몇 개나 맞추나? (%)
+
+```{r, MI percentage, echo = FALSE}
+MI.tbl.p <- round(prop.table(table(MI.score))*100, digits = 2)
+MI.tbl.a.m <- addmargins(MI.tbl.p, margin = 1)
+names(MI.tbl.a.m)[5] <- "계"
+pander(MI.tbl.a.m, caption = "Multiple Intelligence")
+```
+
+### 심적회계(Mental Account)
+
+티켓을 잃어버리는 것과 티켓을 살 돈을 잃어버리는 것의 심리적 차이에 대한 질문. 질문 순서에 따라 반응이 달라지고 있다.
+
+#### 심적회계(티켓분실 사례 먼저 질문)
+
+##### 티켓과 현금
+
+5만원 짜리 입장권을 잃어버리는 것과 5만원짜리 현금을 잃어버리는 것이 동일한 금액임에도 반응이 다르게 나타난다는 심적회계 이론을 살펴보았다.
+
+```{r, Mental Account 1, echo = FALSE}
+tbl.q3 <- table(quiz0523$Q3.2, quiz0523$Q3.3)
+rownames(tbl.q3) <- c("티켓분실", "현금분실")
+tbl.q3.a <- addmargins(tbl.q3)
+rownames(tbl.q3.a)[3] <- "계"
+colnames(tbl.q3.a)[3] <- "계"
+kable(tbl.q3.a, caption = "심적 회계")
+```
+
+##### % 비교.  
+
+```{r, Mental account 1  in percentage, echo = FALSE}
+tbl.q3.p.a <- addmargins(round(prop.table(tbl.q3[1:2, ], margin = 1)*100, digits = 1))[1:2, ]
+colnames(tbl.q3.p.a)[3] <- "계"
+kable(tbl.q3.p.a)
+```
+
+#### 심적회계(현금분실 사례 먼저 질문)
+
+##### 티켓과 현금
+
+5만원 짜리 입장권을 잃어버리는 것과 5만원짜리 현금을 잃어버리는 것이 동일한 금액임에도 반응이 다르게 나타난다는 심적회계 이론을 살펴보았다.
+
+```{r, Mental Account 2, echo = FALSE}
+tbl.q4 <- table(quiz0523$Q4.2, quiz0523$Q4.3)
+rownames(tbl.q4) <- c("티켓분실", "현금분실")
+tbl.q4.a <- addmargins(tbl.q3)
+rownames(tbl.q4.a)[3] <- "계"
+colnames(tbl.q4.a)[3] <- "계"
+kable(tbl.q4.a, caption = "심적 회계")
+```
+
+##### % 비교.  
+
+```{r, Money illusion in percentage, echo = FALSE}
+tbl.q4.p.a <- addmargins(round(prop.table(tbl.q4[1:2, ], margin = 1)*100, digits = 1))[1:2, ]
+colnames(tbl.q4.p.a)[3] <- "계"
+kable(tbl.q4.p.a)
+```
+
+```{r, save, echo = FALSE}
+#save.image("../R/quiz0523.rda")
+```

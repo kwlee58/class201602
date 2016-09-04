@@ -1,0 +1,105 @@
+---
+title: "Quiz 160314"
+author: "coop711"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+# install.packages("pander", repos = "https://cran.rstudio.com")
+# install.packages("xlsx", repos = "https://cran.rstudio.com")
+library(xlsx)
+library(pander)
+library(knitr)
+panderOptions('table.split.table', Inf)
+panderOptions('table.alignment.rownames', 'left')
+panderOptions('table.alignment.default', 'right')
+options(width=180)
+```
+
+```{r, data, echo = FALSE, results = 'hide'}
+quiz0314 <- read.xlsx("../data/quiz0314.xlsx", 1, startRow = 2, endRow = 67, colIndex = c(3:7, 9:14), colClasses=c(rep("character", 11)), stringsAsFactors=FALSE)
+str(quiz0314)
+names(quiz0314) <- c("dept", "id", "name", "year", "e.mail", "cell.no", "Q1", "Q2", "Q3", "Q4", "group")
+quiz0314$dept <- factor(quiz0314$dept)
+quiz0314$year <- factor(quiz0314$year)
+quiz0314$group <- factor(quiz0314$group, levels = c("Red", "Black"))
+quiz0314$Q1 <- factor(quiz0314$Q1, levels = c("가", "나", "다", "라", "마"), labels = c("9:1", "8:2", "7:3", "6:4", "5:5"))
+quiz0314$Q2 <- factor(quiz0314$Q2, levels = c("가", "나", "다", "라", "마"), labels = c("10%", "30%", "50%", "70%", "90%"))
+quiz0314$Q3 <- factor(quiz0314$Q3, levels = c("가", "나", "다", "라", "마"), labels = c("7:3", "6:4", "5:5", "4:6", "3:7"))
+quiz0314$Q4 <- factor(quiz0314$Q4, levels = c("가", "나", "다", "라"))
+quiz0314$Q4.2 <- quiz0314$Q4
+levels(quiz0314$Q4.2[quiz0314$group == "Red"]) <- c("다", "나", "가", "라")
+levels(quiz0314$Q4.2) <- c("해야 한다", "선거연대", "하지 않아야", "잘 모르겠다")
+str(quiz0314)
+```
+
+```{r, randomization, echo = FALSE, results = 'hide'}
+pander(summary(quiz0314))
+```
+
+### 퀴즈 응답 비교
+
+#### 우리나라 국세와 지방세 배분비율
+
+##### 국세와 지방세
+
+```{r, National and Local tax, echo = FALSE}
+pander(addmargins(table(quiz0314$group, quiz0314$Q1, exclude = NULL), margin=1))
+```
+
+##### 국세와 지방세(%)
+
+```{r, National and Local tax in percentage, echo = FALSE}
+pander(round(prop.table(addmargins(table(quiz0314$group, quiz0314$Q1, exclude = NULL), margin=1), margin=1)[4,]*100, digits=1))
+```
+
+#### 공법도입에 대한 대신들의 찬성율
+
+##### 공법도입과 대신들(집계표)
+
+```{r, tax law and cabinets, echo = FALSE}
+pander(addmargins(table(quiz0314$group, quiz0314$Q2, exclude = NULL), margin=1))
+```
+
+##### 공법도입과 대신들(%)
+
+```{r, tax law and cabinets in percentage, echo = FALSE}
+pander(round(prop.table(addmargins(table(quiz0314$group, quiz0314$Q2, exclude = NULL), margin=1), margin=1)[4,]*100, digits=1), caption="공법도입과 대신들")
+```
+
+#### 공법도입과 품관촌민들의 찬반
+
+##### 품관촌민들의 찬반(집계표)
+
+```{r, tax law and laymen, echo = FALSE}
+pander(addmargins(table(quiz0314$group, quiz0314$Q3, exclude = NULL), margin=1))
+```
+
+##### 품관촌민들의 찬반(%)
+
+```{r, tax law and laymen in percentage, echo = FALSE}
+pander(round(prop.table(addmargins(table(quiz0314$group, quiz0314$Q3, exclude = NULL), margin=1), margin=1)[4,]*100, digits=1), caption="품관촌민들의 찬반")
+```
+
+### 야권통합 논란
+
+#### 질문지 답 문항 순서의 영향
+
+##### 긍정적 표현 순으로 답 문항을 늘어놓는지(Red), 부정적 표현 순으로 답 문항을 늘어놓는지(Black)에 따라 응답이 달라질 것으로 기대. Red 와 Black의 응답이 다르게 나타나고 있는 점에 유의!
+
+```{r, outs merge, echo = FALSE}
+pander(table(quiz0314$group, quiz0314$Q4.2, exclude = NULL), caption="야권통합논란")
+```
+
+##### % 비교.  
+
+```{r, outs merge in percentage, echo = FALSE}
+merge.tbl <- table(quiz0314$group, quiz0314$Q4.2)
+pander(round(prop.table(merge.tbl, margin = 1)*100, digits = 1))
+```
+
+```{r, save, echo = FALSE}
+#save.image("../R/quiz0314.rda")
+```

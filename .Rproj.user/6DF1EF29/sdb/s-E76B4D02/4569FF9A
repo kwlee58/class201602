@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "---\n# title: \"Red and Black 160905\"\n# author: \"coop711\"\n# date: \"`r Sys.Date()`\"\noutput: html_document\n---\n\n```{r setup, include=FALSE}\nknitr::opts_chunk$set(echo = TRUE)\n# install.packages(\"pander\", repos = \"https://cran.rstudio.com\")\n# install.packages(\"xlsx\", repos = \"https://cran.rstudio.com\")\nlibrary(xlsx)\nlibrary(pander)\nlibrary(knitr)\npanderOptions('table.split.table', Inf)\n```\n\n<!--\n```{r, data}\nclass_roll <- read.xlsx(\"../data/class_roll0905.xlsx\", 1, startRow = 2, endRow = 101, colIndex = c(3:7, 9), colClasses=rep(\"character\", 6), stringsAsFactors = FALSE)\nstr(class_roll)\nnames(class_roll) <- c(\"dept\", \"id\", \"name\", \"year\", \"e.mail\", \"cell.no\")\nstr(class_roll)\n```\n\n```{r, randomization}\nset.seed(37)\nN <- nrow(class_roll) \nred.id <- sample(1:N, size=floor(N/2))\nred.id\nclass_roll$group <- factor(ifelse((1:N) %in% red.id, \"red\", \"black\"), levels = c(\"red\", \"black\"))\nblack.id<-(1:N)[-red.id]\n```\n-->\n\n<!--\n```{r, id}\nID.15<-factor(ifelse(substr(class_roll$id, 1, 4) >= 2015, \"younger.15\", \"older.15\"), levels=c(\"younger.15\", \"older.15\"))\npander(table(\"15학번 기준\" = ID.15, \"그룹\" = class_roll$group))\nID.14<-factor(ifelse(substr(class_roll$id, 1, 4) >= 2014, \"younger.14\", \"older.14\"), levels=c(\"younger.14\", \"older.14\"))\npander(table(\"14학번 기준\" = ID.14, \"그룹\" = class_roll$group))\nID.13<-factor(ifelse(substr(class_roll$id, 1, 4) >= 2013, \"younger.13\", \"older.13\"), levels=c(\"younger.13\", \"older.13\"))\npander(table(\"13학번 기준\" = ID.13, \"그룹\" = class_roll$group))\nID.12<-factor(ifelse(substr(class_roll$id, 1, 4) >= 2012, \"younger.12\", \"older.12\"), levels=c(\"younger.12\", \"older.12\"))\npander(table(\"12학번 기준\" = ID.12, \"그룹\" = class_roll$group))\n```\n\n```{r, odd or even}\nodd.even <- as.numeric(class_roll$id) %% 2\npander(table(\"odd_even\" = odd.even, \"Group\"= class_roll$group))\n```\n\n```{r, e_mail}\ne.mail.list <- strsplit(class_roll$e.mail, \"@\", fixed = TRUE)\nmail.com <- mapply(\"[\", e.mail.list, 2)\npander(table(\"e-mail\" = mail.com, \"그룹\" = class_roll$group))\n```\n\n```{r, name}\nf.name <- substring(class_roll$name, first = 1, last = 1)\npander(table(\"Family Name\" =f.name, \"Group\" = class_roll$group))\n```\n\n```{r, colleges}\npander(class_roll)\n#table(\"단과대학\" = class_roll$college, \"그룹\" = class_roll$group)\n```\n\n<P style=\"page-break-before:always\">\n\n```{r, list, echo = FALSE}\ngr.id.o <- order(class_roll$group, class_roll$id)\nid.by.gr <- class_roll[gr.id.o, c(\"group\", \"id\", \"name\")]\nred.names <- id.by.gr[id.by.gr$group==\"red\", c(\"id\", \"name\")]\n# pander(red.names)\nblack.names <- id.by.gr[id.by.gr$group==\"black\", c(\"id\", \"name\")]\n# pander(black.names)\n# class_roll[red.id, \"id\"]\n# class_roll[black.id, \"id\"]\n# cbind(class_roll[red.id, \"id\"], class_roll[black.id, \"id\"])\n# red.black.df <- data.frame(\"Red\" = red.names, \"Black\" = black.names, row.names = NULL)\n# red.black.ls <- list(\"Red\" = red.names, \"Black\" = black.names)\n# names(red.black.df) <- c(\"Red\", \"Black\")\n# pander(red.black.ls)\n#kable(red.black.df, align = c(\"c\", \"c\", \"c\", \"c\"))\n```\n-->\n\n```{r, red.names, echo = FALSE}\npander(red.names, caption = \"Red\")\n```\n\n<P style=\"page-break-before:always\">\n\n```{r, black.names, echo = FALSE}\npander(black.names, caption = \"Black\")\n```\n\n\n\n<!--\n```{r, save}\nsave.image(\"../R/red_and_black_160905_data.rda\")\n```\n-->",
+    "created" : 1472568323450.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3488087994",
+    "id" : "4569FF9A",
+    "lastKnownWriteTime" : 1472976448,
+    "last_content_update" : 1472976448329,
+    "path" : "~/Google 드라이브/Works/Class/Statistics/R.WD/Class_data/class201602/R/Red_and_Black_160905.Rmd",
+    "project_path" : null,
+    "properties" : {
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

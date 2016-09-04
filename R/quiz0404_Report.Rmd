@@ -1,0 +1,105 @@
+---
+title: "Quiz 160404"
+author: "coop711"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+# install.packages("pander", repos = "https://cran.rstudio.com")
+# install.packages("xlsx", repos = "https://cran.rstudio.com")
+library(xlsx)
+library(pander)
+library(knitr)
+panderOptions('table.split.table', Inf)
+panderOptions('table.alignment.rownames', 'left')
+panderOptions('table.alignment.default', 'right')
+options(width=180)
+```
+
+```{r, data, echo = FALSE, results = 'hide'}
+quiz0404 <- read.xlsx("../data/quiz0404.xlsx", 1, startRow = 2, endRow = 66, colIndex = c(3:7, 9:14), colClasses = c(rep("character", 11)), stringsAsFactors=FALSE)
+str(quiz0404)
+names(quiz0404) <- c("dept", "id", "name", "year", "e.mail", "cell.no", "Q1", "Q2", "Q3", "Q4", "group")
+quiz0404$dept <- factor(quiz0404$dept)
+quiz0404$year <- factor(quiz0404$year)
+quiz0404$group <- factor(quiz0404$group, levels = c("Red", "Black"))
+quiz0404$Q1 <- factor(quiz0404$Q1, levels = c("가", "나", "다", "라"), labels = c("확률적추출방법", "할당법", "유선전화번호부", "RDD"))
+quiz0404$Q2 <- factor(quiz0404$Q2, levels = c("가", "나", "다", "라"), labels = c("2배로 늘린다", "4배로 늘린다", "1/2로 줄인다", "1/4로 줄인다"))
+quiz0404$Q3 <- factor(quiz0404$Q3, levels = c("가", "나", "다", "라"), labels = c("국민 전체", "만18세이상 국민", "등록된 유권자", "선거당일 투표하는 유권자"))
+quiz0404$Q4 <- factor(quiz0404$Q4, levels = c("1", "2", "4", "9"))
+quiz0404$Q4.2 <- quiz0404$Q4
+levels(quiz0404$Q4.2[quiz0404$group == "Black"]) <- c("1", "2", "4", "9")
+levels(quiz0404$Q4.2) <- c("A후보", "B후보", "C후보", "없거나/모르겠다")
+str(quiz0404)
+```
+
+```{r, randomization, echo = FALSE, results = 'hide'}
+pander(summary(quiz0404))
+```
+
+### 퀴즈 응답 비교
+
+#### 1948대선 여론조사의 의의
+
+##### 확률적 표본추출 방법 도입
+
+```{r, probability sampling, echo = FALSE}
+pander(addmargins(table(quiz0404$group, quiz0404$Q1, exclude = NULL), margin=1))
+```
+
+##### 확률적 표본추출 방법 도입(%)
+
+```{r, probability sampling in percentage, echo = FALSE}
+pander(round(prop.table(addmargins(table(quiz0404$group, quiz0404$Q1, exclude = NULL), margin=1), margin=1)[4,]*100, digits=1))
+```
+
+#### 표본오차를 1/2로 줄이려면
+
+##### 표본 크기를 4배로
+
+```{r, Sampling Error, echo = FALSE}
+pander(addmargins(table(quiz0404$group, quiz0404$Q2, exclude = NULL), margin=1))
+```
+
+##### 표본 크기를 4배로 (%)
+
+```{r, Sampling Error in percentage, echo = FALSE}
+pander(round(prop.table(addmargins(table(quiz0404$group, quiz0404$Q2, exclude = NULL), margin=1), margin=1)[4,]*100, digits=1), caption="20대의 독서율")
+```
+
+#### 목표모집단의 정의
+
+##### 선거당일 투표하는 유권자
+
+```{r, non-voter, echo = FALSE}
+pander(addmargins(table(quiz0404$group, quiz0404$Q3, exclude = NULL), margin=1))
+```
+
+##### 선거당일 투표하는 유권자(%)
+
+```{r, non-voter in percentage, echo = FALSE}
+pander(round(prop.table(addmargins(table(quiz0404$group, quiz0404$Q3, exclude = NULL), margin = 1), margin = 1)[4,]*100, digits = 1), caption = "Quota Sampling")
+```
+
+### C시의 국회의원 후보 지지도 파악
+
+#### 질문지 답 문항 순서의 영향
+
+##### 기호순(Red)과 기호역순(Black)에 따라 응답이 달라질 것으로 기대하였으나 응답은 거의 동일하게 나옴.
+
+```{r, vote attitude, echo = FALSE}
+pander(table(quiz0404$group, quiz0404$Q4.2, exclude = NULL), caption="후보지지도")
+```
+
+##### % 비교.  
+
+```{r, vote attitude in percentage, echo = FALSE}
+merge.tbl <- table(quiz0404$group, quiz0404$Q4.2)
+pander(round(prop.table(merge.tbl, margin = 1)*100, digits = 1))
+```
+
+```{r, save, echo = FALSE}
+#save.image("../R/quiz0404.rda")
+```
