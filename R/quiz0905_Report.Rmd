@@ -19,7 +19,7 @@ options(width=180)
 ```
 
 ```{r, data, echo = FALSE, results = 'hide'}
-quiz0905 <- read.xlsx("../data/quiz0905_test.xlsx", 1, startRow = 2, endRow = 101, colIndex = c(3:7, 9:14), colClasses=c(rep("character", 11)), stringsAsFactors=FALSE)
+quiz0905 <- read.xlsx("../data/quiz0905.xlsx", 1, startRow = 2, endRow = 101, colIndex = c(3:7, 9:14), colClasses=c(rep("character", 11)), stringsAsFactors=FALSE)
 str(quiz0905)
 names(quiz0905) <- c("dept", "id", "name", "year", "e.mail", "cell.no", "Q1", "Q2", "Q3", "Q4", "group")
 quiz0905$dept <- factor(quiz0905$dept)
@@ -46,13 +46,16 @@ pander(summary(quiz0905))
 ##### 국세와 지방세
 
 ```{r, National and Local tax, echo = FALSE}
-pander(addmargins(table(quiz0905$group, quiz0905$Q1, exclude = NULL), margin=1))
+Q1.tbl.am <- addmargins(table(quiz0905$group, quiz0905$Q1, exclude = NULL), margin = 1)
+colnames(Q1.tbl.am)[6] <- "결석"
+rownames(Q1.tbl.am)[4] <- "계"
+pander(Q1.tbl.am)
 ```
 
 ##### 국세와 지방세(%)
 
 ```{r, National and Local tax in percentage, echo = FALSE}
-pander(round(prop.table(addmargins(table(quiz0905$group, quiz0905$Q1, exclude = NULL), margin=1), margin=1)[4,]*100, digits=1))
+pander(round(prop.table(Q1.tbl.am, margin = 1)[4, ]*100, digits = 2))
 ```
 
 #### 공법도입에 대한 대신들의 찬성율
@@ -60,13 +63,16 @@ pander(round(prop.table(addmargins(table(quiz0905$group, quiz0905$Q1, exclude = 
 ##### 공법도입과 대신들(집계표)
 
 ```{r, tax law and cabinets, echo = FALSE}
-pander(addmargins(table(quiz0905$group, quiz0905$Q2, exclude = NULL), margin=1))
+Q2.tbl.am <- addmargins(table(quiz0905$group, quiz0905$Q2, exclude = NULL), margin = 1)
+colnames(Q2.tbl.am)[6] <- "결석"
+rownames(Q2.tbl.am)[4] <- "계"
+pander(Q2.tbl.am)
 ```
 
 ##### 공법도입과 대신들(%)
 
 ```{r, tax law and cabinets in percentage, echo = FALSE}
-pander(round(prop.table(addmargins(table(quiz0905$group, quiz0905$Q2, exclude = NULL), margin=1), margin=1)[4,]*100, digits=1), caption="공법도입과 대신들")
+pander(round(prop.table(Q2.tbl.am, margin=1)[4,]*100, digits = 2), caption = "공법도입과 대신들의 찬성률")
 ```
 
 #### 공법도입과 품관촌민들의 찬반
@@ -74,13 +80,16 @@ pander(round(prop.table(addmargins(table(quiz0905$group, quiz0905$Q2, exclude = 
 ##### 품관촌민들의 찬반(집계표)
 
 ```{r, tax law and laymen, echo = FALSE}
-pander(addmargins(table(quiz0905$group, quiz0905$Q3, exclude = NULL), margin=1))
+Q3.tbl.am <-addmargins(table(quiz0905$group, quiz0905$Q3, exclude = NULL), margin = 1)
+colnames(Q3.tbl.am)[6] <- "결석"
+rownames(Q3.tbl.am)[4] <- "계"
+pander(Q3.tbl.am)
 ```
 
 ##### 품관촌민들의 찬반(%)
 
 ```{r, tax law and laymen in percentage, echo = FALSE}
-pander(round(prop.table(addmargins(table(quiz0905$group, quiz0905$Q3, exclude = NULL), margin=1), margin=1)[4,]*100, digits=1), caption="품관촌민들의 찬반")
+pander(round(prop.table(Q3.tbl.am, margin = 1)[4, ]*100, digits = 1), caption = "품관촌민들의 찬반")
 ```
 
 ### 테러방지법 찬반
@@ -90,7 +99,9 @@ pander(round(prop.table(addmargins(table(quiz0905$group, quiz0905$Q3, exclude = 
 ##### 집계표. 찬반 어느 쪽에 부연설명을 하였는가(Red는 찬성 쪽에 부연설명, Black은 반대 쪽에 부연설명)에 따라 찬반에 영향. 
 
 ```{r, anti-terror law, echo = FALSE}
-pander(table(quiz0905$group, quiz0905$Q4, exclude = NULL), caption="테러방지법")
+thaad.tbl.e <- table(quiz0905$group, quiz0905$Q4, exclude = NULL)
+colnames(thaad.tbl.e)[4] <- "결석"
+pander(thaad.tbl.e, caption="테러방지법")
 # pander(table(quiz0905$group, quiz0905$Q4.2, exclude = NULL), caption="테러방지법")
 ```
 
