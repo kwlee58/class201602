@@ -97,7 +97,7 @@ pander(table("그룹" = class_roll$group, "e-mail" = mail.com.f))
 
 <!--
 
-```{r, save, echo=FALSE, message=FALSE, results='hide'}
+```{r, save, echo=FALSE, message=FALSE, results = 'hide'}
 save.image("../R/red_and_black_160905_data.rda")
 ```
 

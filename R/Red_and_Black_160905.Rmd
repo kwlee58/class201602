@@ -17,7 +17,7 @@ panderOptions('table.split.table', Inf)
 
 <!--
 ```{r, data}
-class_roll <- read.xlsx("../data/class_roll0905.xlsx", 1, startRow = 2, endRow = 101, colIndex = c(3:7, 9), colClasses=rep("character", 6), stringsAsFactors = FALSE)
+class_roll <- read.xlsx("../data/class_roll0905v2.xlsx", 1, startRow = 2, endRow = 101, colIndex = c(3:7, 9), colClasses=rep("character", 6), stringsAsFactors = FALSE)
 str(class_roll)
 names(class_roll) <- c("dept", "id", "name", "year", "e.mail", "cell.no")
 str(class_roll)

@@ -33,7 +33,7 @@ class_roll$"name"[!id1.not.in.2]
 ```{r, randomization}
 set.seed(37)
 N <- nrow(class_roll) 
-red.id <- sample(1:N, size=floor(N/2))
+red.id <- sample(1:N, size = floor(N/2))
 red.id
 class_roll$group <- factor(ifelse((1:N) %in% red.id, "red", "black"), levels = c("red", "black"))
 black.id<-(1:N)[-red.id]
@@ -42,7 +42,7 @@ black.id<-(1:N)[-red.id]
 
 <!--
 ```{r, id}
-ID.15<-factor(ifelse(substr(class_roll$id, 1, 4) >= 2015, "younger.15", "older.15"), levels=c("younger.15", "older.15"))
+ID.15<-factor(ifelse(substr(class_roll.2$id, 1, 4) >= 2015, "younger.15", "older.15"), levels=c("younger.15", "older.15"))
 pander(table("15학번 기준" = ID.15, "그룹" = class_roll$group))
 ID.14<-factor(ifelse(substr(class_roll$id, 1, 4) >= 2014, "younger.14", "older.14"), levels=c("younger.14", "older.14"))
 pander(table("14학번 기준" = ID.14, "그룹" = class_roll$group))
@@ -72,15 +72,18 @@ pander(table("Family Name" =f.name, "Group" = class_roll$group))
 pander(class_roll)
 #table("단과대학" = class_roll$college, "그룹" = class_roll$group)
 ```
+-->
 
-<P style="page-break-before:always">
-
-```{r, list, echo = FALSE}
+```{r, list, echo = FALSE,}
 gr.id.o <- order(class_roll$group, class_roll$id)
 id.by.gr <- class_roll[gr.id.o, c("group", "id", "name")]
 red.names <- id.by.gr[id.by.gr$group=="red", c("id", "name")]
 # pander(red.names)
 black.names <- id.by.gr[id.by.gr$group=="black", c("id", "name")]
+black.names.2 <- black.names
+black.names.2[black.names.2$name == "장정길", ]
+class_roll.2[class_roll.2$name == "허소영", c("id", "name")]
+(black.names.2[black.names.2$name == "장정길", ] <- class_roll.2[class_roll.2$name == "허소영", c("id", "name")])
 # pander(black.names)
 # class_roll[red.id, "id"]
 # class_roll[black.id, "id"]
@@ -91,7 +94,8 @@ black.names <- id.by.gr[id.by.gr$group=="black", c("id", "name")]
 # pander(red.black.ls)
 #kable(red.black.df, align = c("c", "c", "c", "c"))
 ```
--->
+
+<P style="page-break-before:always">
 
 ```{r, red.names, echo = FALSE}
 pander(red.names, caption = "Red")
@@ -100,7 +104,7 @@ pander(red.names, caption = "Red")
 <P style="page-break-before:always">
 
 ```{r, black.names, echo = FALSE}
-pander(black.names, caption = "Black")
+pander(black.names.2, caption = "Black")
 ```
 
 
