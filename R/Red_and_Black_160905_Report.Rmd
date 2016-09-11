@@ -95,6 +95,12 @@ mail.com.f <- factor(ifelse(mail.com == "naver.com", "네이버", "기타서비�
 pander(table("그룹" = class_roll$group, "e-mail" = mail.com.f))
 ```
 
+#### 학과 분포
+
+```{r, department, echo = FALSE}
+pander(table("그룹" = class_roll$group, "학과" = class_roll$dept))
+```
+
 <!--
 
 ```{r, save, echo=FALSE, message=FALSE, results = 'hide'}

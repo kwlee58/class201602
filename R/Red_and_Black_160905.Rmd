@@ -15,9 +15,8 @@ library(knitr)
 panderOptions('table.split.table', Inf)
 ```
 
-<!--
 ```{r, data}
-class_roll <- read.xlsx("../data/class_roll0905v2.xlsx", 1, startRow = 2, endRow = 101, colIndex = c(3:7, 9), colClasses=rep("character", 6), stringsAsFactors = FALSE)
+class_roll <- read.xlsx("../data/class_roll0905.xlsx", 1, startRow = 2, endRow = 101, colIndex = c(3:7, 9), colClasses = rep("character", 6), stringsAsFactors = FALSE)
 str(class_roll)
 names(class_roll) <- c("dept", "id", "name", "year", "e.mail", "cell.no")
 str(class_roll)
@@ -28,12 +27,10 @@ set.seed(37)
 N <- nrow(class_roll) 
 red.id <- sample(1:N, size=floor(N/2))
 red.id
-class_roll$group <- factor(ifelse((1:N) %in% red.id, "red", "black"), levels = c("red", "black"))
+class_roll$group <- factor(ifelse((1:N) %in% red.id, "Red", "Black"), levels = c("Red", "Black"))
 black.id<-(1:N)[-red.id]
 ```
--->
 
-<!--
 ```{r, id}
 ID.15<-factor(ifelse(substr(class_roll$id, 1, 4) >= 2015, "younger.15", "older.15"), levels=c("younger.15", "older.15"))
 pander(table("15학번 기준" = ID.15, "그룹" = class_roll$group))
@@ -69,11 +66,11 @@ pander(class_roll)
 <P style="page-break-before:always">
 
 ```{r, list, echo = FALSE}
-gr.id.o <- order(class_roll$group, class_roll$id)
+gr.id.o <- order(class_roll$group, class_roll$name)
 id.by.gr <- class_roll[gr.id.o, c("group", "id", "name")]
-red.names <- id.by.gr[id.by.gr$group=="red", c("id", "name")]
+red.names <- id.by.gr[id.by.gr$group=="Red", c("id", "name")]
 # pander(red.names)
-black.names <- id.by.gr[id.by.gr$group=="black", c("id", "name")]
+black.names <- id.by.gr[id.by.gr$group=="Black", c("id", "name")]
 # pander(black.names)
 # class_roll[red.id, "id"]
 # class_roll[black.id, "id"]
@@ -84,7 +81,6 @@ black.names <- id.by.gr[id.by.gr$group=="black", c("id", "name")]
 # pander(red.black.ls)
 #kable(red.black.df, align = c("c", "c", "c", "c"))
 ```
--->
 
 ```{r, red.names, echo = FALSE}
 pander(red.names, caption = "Red")
@@ -95,8 +91,6 @@ pander(red.names, caption = "Red")
 ```{r, black.names, echo = FALSE}
 pander(black.names, caption = "Black")
 ```
-
-
 
 <!--
 ```{r, save}

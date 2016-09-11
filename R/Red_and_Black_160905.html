@@ -118,441 +118,1313 @@ $(document).ready(function () {
 </div>
 
 
-<!--
-
-```r
-class_roll <- read.xlsx("../data/class_roll0905v2.xlsx", 1, startRow = 2, endRow = 101, colIndex = c(3:7, 9), colClasses=rep("character", 6), stringsAsFactors = FALSE)
-str(class_roll)
-```
-
-```
-## 'data.frame':    99 obs. of  6 variables:
-##  $ 학과      : chr  "법학과" "응용광물리학과" "전자공학과" "법학과" ...
-##  $ 학.직.번  : chr  "20152701" "20113501" "20135201" "20152703" ...
-##  $ 이름      : chr  "강민수" "강현모" "고용빈" "고지은" ...
-##  $ 학년      : chr  "2" "4" "2" "2" ...
-##  $ E.Mail    : chr  "o.sweetie@daum.net" "afafgg12_13@naver.com" "kowc831@naver.com" "kje0769@hanmail.net" ...
-##  $ 핸드폰번호: chr  "010-4298-1565" "010-2285-6757" "010-3087-8025" "010-5540-0454" ...
-```
-
-```r
-names(class_roll) <- c("dept", "id", "name", "year", "e.mail", "cell.no")
-str(class_roll)
-```
-
-```
-## 'data.frame':    99 obs. of  6 variables:
-##  $ dept   : chr  "법학과" "응용광물리학과" "전자공학과" "법학과" ...
-##  $ id     : chr  "20152701" "20113501" "20135201" "20152703" ...
-##  $ name   : chr  "강민수" "강현모" "고용빈" "고지은" ...
-##  $ year   : chr  "2" "4" "2" "2" ...
-##  $ e.mail : chr  "o.sweetie@daum.net" "afafgg12_13@naver.com" "kowc831@naver.com" "kje0769@hanmail.net" ...
-##  $ cell.no: chr  "010-4298-1565" "010-2285-6757" "010-3087-8025" "010-5540-0454" ...
-```
-
-
-```r
-set.seed(37)
-N <- nrow(class_roll) 
-red.id <- sample(1:N, size=floor(N/2))
-red.id
-```
-
-```
-##  [1] 55  8 63 48 69 79 36 33 19 14 92 64 37  1 78 68 67 12 96 66 28 80 40
+<pre class="r"><code>class_roll &lt;- read.xlsx(&quot;../data/class_roll0905.xlsx&quot;, 1, startRow = 2, endRow = 101, colIndex = c(3:7, 9), colClasses = rep(&quot;character&quot;, 6), stringsAsFactors = FALSE)
+str(class_roll)</code></pre>
+<pre><code>## 'data.frame':    99 obs. of  6 variables:
+##  $ 학과      : chr  &quot;법학과&quot; &quot;응용광물리학과&quot; &quot;전자공학과&quot; &quot;법학과&quot; ...
+##  $ 학.직.번  : chr  &quot;20152701&quot; &quot;20113501&quot; &quot;20135201&quot; &quot;20152703&quot; ...
+##  $ 이름      : chr  &quot;강민수&quot; &quot;강현모&quot; &quot;고용빈&quot; &quot;고지은&quot; ...
+##  $ 학년      : chr  &quot;2&quot; &quot;4&quot; &quot;2&quot; &quot;2&quot; ...
+##  $ E.Mail    : chr  &quot;o.sweetie@daum.net&quot; &quot;afafgg12_13@naver.com&quot; &quot;kowc831@naver.com&quot; &quot;kje0769@hanmail.net&quot; ...
+##  $ 핸드폰번호: chr  &quot;010-4298-1565&quot; &quot;010-2285-6757&quot; &quot;010-3087-8025&quot; &quot;010-5540-0454&quot; ...</code></pre>
+<pre class="r"><code>names(class_roll) &lt;- c(&quot;dept&quot;, &quot;id&quot;, &quot;name&quot;, &quot;year&quot;, &quot;e.mail&quot;, &quot;cell.no&quot;)
+str(class_roll)</code></pre>
+<pre><code>## 'data.frame':    99 obs. of  6 variables:
+##  $ dept   : chr  &quot;법학과&quot; &quot;응용광물리학과&quot; &quot;전자공학과&quot; &quot;법학과&quot; ...
+##  $ id     : chr  &quot;20152701&quot; &quot;20113501&quot; &quot;20135201&quot; &quot;20152703&quot; ...
+##  $ name   : chr  &quot;강민수&quot; &quot;강현모&quot; &quot;고용빈&quot; &quot;고지은&quot; ...
+##  $ year   : chr  &quot;2&quot; &quot;4&quot; &quot;2&quot; &quot;2&quot; ...
+##  $ e.mail : chr  &quot;o.sweetie@daum.net&quot; &quot;afafgg12_13@naver.com&quot; &quot;kowc831@naver.com&quot; &quot;kje0769@hanmail.net&quot; ...
+##  $ cell.no: chr  &quot;010-4298-1565&quot; &quot;010-2285-6757&quot; &quot;010-3087-8025&quot; &quot;010-5540-0454&quot; ...</code></pre>
+<pre class="r"><code>set.seed(37)
+N &lt;- nrow(class_roll) 
+red.id &lt;- sample(1:N, size=floor(N/2))
+red.id</code></pre>
+<pre><code>##  [1] 55  8 63 48 69 79 36 33 19 14 92 64 37  1 78 68 67 12 96 66 28 80 40
 ## [24] 65 70 32 62 88 45  5  4 11 86 30  3 75 42 76 15 71 24 53 52 34 44 13
-## [47] 83 98 77
-```
-
-```r
-class_roll$group <- factor(ifelse((1:N) %in% red.id, "red", "black"), levels = c("red", "black"))
-black.id<-(1:N)[-red.id]
-```
--->
-<!--
-
-```r
-ID.15<-factor(ifelse(substr(class_roll$id, 1, 4) >= 2015, "younger.15", "older.15"), levels=c("younger.15", "older.15"))
-pander(table("15학번 기준" = ID.15, "그룹" = class_roll$group))
-```
-
-
-------------------------------
-     &nbsp;       red   black 
----------------- ----- -------
- **younger.15**   24     27   
-
-  **older.15**    25     23   
-------------------------------
-
-```r
-ID.14<-factor(ifelse(substr(class_roll$id, 1, 4) >= 2014, "younger.14", "older.14"), levels=c("younger.14", "older.14"))
-pander(table("14학번 기준" = ID.14, "그룹" = class_roll$group))
-```
-
-
-------------------------------
-     &nbsp;       red   black 
----------------- ----- -------
- **younger.14**   29     33   
-
-  **older.14**    20     17   
-------------------------------
-
-```r
-ID.13<-factor(ifelse(substr(class_roll$id, 1, 4) >= 2013, "younger.13", "older.13"), levels=c("younger.13", "older.13"))
-pander(table("13학번 기준" = ID.13, "그룹" = class_roll$group))
-```
-
-
-------------------------------
-     &nbsp;       red   black 
----------------- ----- -------
- **younger.13**   44     39   
-
-  **older.13**     5     11   
-------------------------------
-
-```r
-ID.12<-factor(ifelse(substr(class_roll$id, 1, 4) >= 2012, "younger.12", "older.12"), levels=c("younger.12", "older.12"))
-pander(table("12학번 기준" = ID.12, "그룹" = class_roll$group))
-```
-
-
-------------------------------
-     &nbsp;       red   black 
----------------- ----- -------
- **younger.12**   47     45   
-
-  **older.12**     2      5   
-------------------------------
-
-
-```r
-odd.even <- as.numeric(class_roll$id) %% 2
-pander(table("odd_even" = odd.even, "Group"= class_roll$group))
-```
-
-
----------------------
-&nbsp;   red   black 
-------- ----- -------
- **0**   20     22   
-
- **1**   29     28   
----------------------
-
-
-```r
-e.mail.list <- strsplit(class_roll$e.mail, "@", fixed = TRUE)
-mail.com <- mapply("[", e.mail.list, 2)
-pander(table("e-mail" = mail.com, "그룹" = class_roll$group))
-```
-
-
--------------------------------
-     &nbsp;        red   black 
------------------ ----- -------
-  **daum.net**      2      1   
-
-  **gmail.com**     1      2   
-
- **hanmail.net**    4      1   
-
-  **nate.com**      2      3   
-
-  **naver.com**    40     43   
--------------------------------
-
-
-```r
-f.name <- substring(class_roll$name, first = 1, last = 1)
-pander(table("Family Name" =f.name, "Group" = class_roll$group))
-```
-
-
-----------------------
- &nbsp;   red   black 
--------- ----- -------
- **강**    1      1   
-
- **고**    2      0   
-
- **권**    1      1   
-
- **김**    7     10   
-
- **노**    1      0   
-
- **모**    0      1   
-
- **문**    0      2   
-
- **박**    6      3   
-
- **배**    1      0   
-
- **서**    0      1   
-
- **손**    0      1   
-
- **송**    1      0   
-
- **신**    1      2   
-
- **안**    2      1   
-
- **양**    0      1   
-
- **엄**    1      0   
-
- **염**    0      1   
-
- **오**    1      2   
-
- **유**    1      1   
-
- **이**    6      6   
-
- **인**    1      0   
-
- **임**    4      0   
-
- **전**    0      3   
-
- **정**    5      0   
-
- **조**    2      2   
-
- **지**    0      1   
-
- **최**    2      5   
-
- **한**    1      2   
-
- **허**    1      2   
-
- **현**    1      0   
-
- **황**    0      1   
-----------------------
-
-
-```r
-pander(class_roll)
-```
-
-
---------------------------------------------------------------------------------------------
-         dept             id     name   year           e.mail             cell.no     group 
----------------------- -------- ------ ------ ------------------------ ------------- -------
-        법학과         20152701 강민수   2       o.sweetie@daum.net    010-4298-1565   red  
-
-    응용광물리학과     20113501 강현모   4     afafgg12_13@naver.com   010-2285-6757  black 
-
-      전자공학과       20135201 고용빈   2       kowc831@naver.com     010-3087-8025   red  
-
-        법학과         20152703 고지은   2      kje0769@hanmail.net    010-5540-0454   red  
-
-        법학과         20152704 권리아   2      rnjsfldk12@naver.com   010-6807-3100   red  
-
-  융합소프트웨어학과   20135304 권혁준   2       joon5125@naver.com    010-8733-5125  black 
-
-        간호학         20166209 김가람   1      garam1997@naver.com    010-4254-7661  black 
-
-   융합신소재공학과    20165402 김도우   1       3720kdw@naver.com     010-5138-3720   red  
-
-       경영학과        20162817 김문규   1     mellion7410@naver.com   010-9250-6284  black 
-
-       경영학과        20162819 김민정   1       m2343m62@naver.com    010-6241-4993  black 
-
-     컴퓨터공학과      20155110 김민정   2        akkmjj@naver.com     010-4184-8659   red  
-
-언론방송융합미디어전공 20132663 김민지   3      alslwkim76@naver.com   010-2084-7263   red  
-
-       경영학과        20162820 김민철   1      min972003@naver.com    010-9131-9796   red  
-
-        화학과         20153607 김병욱   2       sisiusa9@naver.com    010-6398-7856   red  
-
-      생명과학과       20143710 김성희   3     sunghee12067@naver.com  010-5067-3094   red  
-
-     컴퓨터공학과      20155113 김솔이   2        nisi96@naver.com     010-5359-5773  black 
-
-       경영학과        20162824 김영민   1       kkd04192@naver.com    010-3145-2655  black 
-
-       경영학과        20152832 김정인   2       2540298@naver.com     010-4802-6298  black 
-
-       경영학과        20162832 김지수   1     rlawltn4766@naver.com   010-4766-8836   red  
-
-   융합신소재공학과    20145411 김지은   3     milk-kje1014@daum.net   010-4212-4066  black 
-
-  융합소프트웨어학과   20135315 김청호   2       musoul12@nate.com     010-8573-4020  black 
-
-     컴퓨터공학과      20155118 김태훈   2       kth_1126@naver.com    010-5369-8056  black 
-
-    환경생명공학과     20153940 김하은   2       hwk1210@naver.com     010-9867-6612  black 
-
-    응용광물리학과     20133504 노재환   4        nojh94@naver.com     010-8889-8085   red  
-
-       경제학과        20163013 모미선   1      altjs1325@naver.com    010-8502-2231  black 
-
-        법학과         20142726 문수진   3      ansdj8260@naver.com    010-4420-8251  black 
-
-   융합신소재공학과    20165410 문제철   1       moun1204@naver.com    010-5544-7635  black 
-
-       경영학과        20132844 박경국   2       prudrnr@naver.com     010-9419-6340   red  
-
-        간호학         20156238 박다미   2      qkrekal38@naver.com    010-7558-3504  black 
-
-      청각학전공       20154219 박다솜   2     qkrektha222@naver.com   010-4634-6656   red  
-
-  융합소프트웨어학과   20135322 박상욱   2      tkddnrdlsp@naver.com   010-7187-9910  black 
-
-        법학과         20142728 박성은   3      tjddms8183@nate.com    010-6863-0519   red  
-
-   융합신소재공학과    20165413 박용희   1       pyh2117@naver.com     010-2494-8697   red  
-
-       중국학과        20151518 박채영   2     coduddlsla21@naver.com  010-4199-9549   red  
-
-        간호학         20166236 박현진   1      guswls5686@naver.com   010-5621-5686  black 
-
-      전자공학과       20115228 박호균   3     guardiankyun@naver.com  010-5359-8819   red  
-
-       중국학과        20151519 배유진   2       yjbhe@hanmail.net     010-7476-3027   red  
-
-      청각학전공       20114229 서형범   4      seo0201kr@naver.com    010-7122-0629  black 
-
-        간호학         20166241 손원정   1      wjson3710@naver.com    010-7756-3715  black 
-
-      청각학전공       20154232 송혜인   2       hin7506@naver.com     010-7612-0511   red  
-
-     컴퓨터공학과      20115143 신성진   4      billde1290@naver.com   010-2834-1290  black 
-
-        화학과         20153617 신주현   2      wngus3512@naver.com    010-4467-6335   red  
-
-    응용광물리학과     20113519 신형화   4      shinrace0@naver.com    010-7205-7486  black 
-
-   융합신소재공학과    20165419 안용주   1       kum8025@naver.com     010-5364-4667   red  
-
-  융합소프트웨어학과   20125321 안원용   3       zzklecck@naver.com    010-7795-7205   red  
-
-      전자공학과       20135227 안정희   2     qnlalfthsus1@naver.com  010-2790-7237  black 
-
-       경제학과        20113136 양제영   4      reallyyjy@naver.com    010-7436-1220  black 
-
-    환경생명공학과     20133915 엄태현   2        eyum516@nate.com     010-9075-8529   red  
-
-  융합소프트웨어학과   20125323 염철진   3        nacw69@nate.com      010-3871-4550  black 
-
-     컴퓨터공학과      20155141 오석준   2       seok982@naver.com     010-4766-7866  black 
-
-      전자공학과       20125238 오원제   3      dhdnjswpdh@naver.com   010-9416-0620  black 
-
-   융합신소재공학과    20155420 오윤재   2       ohyj1996@naver.com    010-5150-9025   red  
-
-      전자공학과       20135231 유병호   2      dbqudgh137@naver.com   010-9323-4291   red  
-
-   융합신소재공학과    20155422 유재선   2      abalon1996@naver.com   010-5039-5547  black 
-
-       경영학과        20132895 이기훈   2        aiomas@naver.com     010-2699-0631   red  
-
-     재무금융학과      20163127 이상원   1      zldnjdiwl2@naver.com   010-3262-7562  black 
-
-       경제학과        20123151 이순재   3      tnswo2686@naver.com    010-4725-2686  black 
-
-        법학과         20152757  이슬    2        ls5555@naver.com     010-9427-4546  black 
-
-  융합소프트웨어학과   20145333 이아림   3       ehddk999@gmail.com    010-8508-5438  black 
-
-      전자공학과       20135241 이재훈   2     dlwogns3000@naver.com   010-6739-1135  black 
-
-    응용광물리학과     20123527 이정우   3     dlwjddn1992@naver.com   010-6214-6209  black 
-
-       철학전공        20151329 이주현   2     juhyunkbstar@naver.com  010-6347-8550   red  
-
-      전자공학과       20145246 이지연   3     villain77777@gmail.com  010-5030-0679   red  
-
-        화학과         20153627 이학무   2      dlgkran430@naver.com   010-9184-8731   red  
-
-       경영학과        20102920 이혁진   4    hjlekzm1991@hanmail.net  010-8630-9616   red  
-
-       심리학과        20132133 이현호   4       wdb1414@naver.com     010-2296-6890   red  
-
-       경영학과        20162895 인소영   1     dlsthdud0624@naver.com  010-9470-7005   red  
-
-        법학과         20152765 임보라   2    borabora0629@hanmail.net 010-3085-9566   red  
-
-       경제학과        20143151 임보령   3      mickeyfood@naver.com   010-5386-1912   red  
-
-       심리학과        20132134 임소윤   4       0182lsy@naver.com      1049911456     red  
-
-언론방송융합미디어전공 20122619 임희준   3       onam4606@daum.net     010-7456-4123   red  
-
-     재무금융학과      20163136 전승윤   1       jjjr0817@naver.com    010-3392-8339  black 
-
-        화학과         20153628 전인창   2     wjsdlsckd123@nate.com   010-3322-9671  black 
-
-   융합신소재공학과    20165427 전현종   1      gs486ek11@naver.com    010-2386-9360  black 
-
-      전자공학과       20135251 정규성   2      tizmrmfoq@naver.com    010-8011-1368   red  
-
-      전자공학과       20145271 정예은   3        kop199@naver.com     010-7130-2436   red  
-
-   융합신소재공학과    20155432 정예주   2       wdw0127@naver.com     010-3173-2644   red  
-
-     재무금융학과      20163138 정해석   1       tiya516@naver.com     010-6227-6890   red  
-
-      청각학전공       20134255 정현경   4       jhk7662@naver.com     010-6409-0420   red  
-
-    환경생명공학과     20133931 조다은   4      alsdud335@naver.com    010-9931-1597   red  
-
-     정치행정학과      20122437 조진만   3       raridi21@gmail.com    010-7225-0135  black 
-
-        화학과         20153630 조현아   2         clgk@naver.com      010-5591-0794  black 
-
-      생명과학과       20133747 조현준   2      whguswns89@naver.com   010-5067-1643   red  
-
-        화학과         20153632 지훈배   2      kittyxyz@hanmail.net   010-8664-7034  black 
-
-  융합소프트웨어학과   20145348 최수진   3     chltnwlsgkgk@naver.com  010-4008-5227  black 
-
-       경제학과        20163046 최승혁   1      csh970711@naver.com    010-4664-4605   red  
-
-        법학과         20122787 최아정   4        withbb@naver.com     010-3699-2075  black 
-
-    언어병리학전공     20154265 최유경   2      chldbrud64@naver.com   010-9572-5785   red  
-
-      청각학전공       20144260 최인혁   3      inhyeki95@naver.com    010-2081-7122  black 
-
-        화학과         20163432 최재웅   1       cjw9608@naver.com      1077227385    black 
-
-    환경생명공학과     20133943 최한림   2       hrch1004@naver.com    010-9891-3255  black 
-
-  융합소프트웨어학과   20135356 한민구   2     alsrnalsrn94@naver.com  010-3454-7128   red  
-
-       경영학과        20162920 한승후   1      wnsqja4777@naver.com   010-2078-4777  black 
-
-       경영학과        20162923 한재혁   1      eoxhdfud9@naver.com    010-5635-2491  black 
-
-        간호학         20166303 허소영   1     thdudthdud_@naver.com   010-9358-5881  black 
-
-      생명과학과       20133753 허탁성   2     gjxkrtjd2221@naver.com  010-3997-4664   red  
-
-  융합소프트웨어학과   20145352 허해리   3       heri9505@naver.com    010-5597-4351  black 
-
-        법학과         20122793 현서정   4     lovelytjwjd@naver.com   010-9359-6069   red  
-
-   융합신소재공학과    20155437 황하은   2      dorapooh_@naver.com    010-3647-5723  black 
---------------------------------------------------------------------------------------------
-
-```r
-#table("단과대학" = class_roll$college, "그룹" = class_roll$group)
-```
-
+## [47] 83 98 77</code></pre>
+<pre class="r"><code>class_roll$group &lt;- factor(ifelse((1:N) %in% red.id, &quot;Red&quot;, &quot;Black&quot;), levels = c(&quot;Red&quot;, &quot;Black&quot;))
+black.id&lt;-(1:N)[-red.id]</code></pre>
+<pre class="r"><code>ID.15&lt;-factor(ifelse(substr(class_roll$id, 1, 4) &gt;= 2015, &quot;younger.15&quot;, &quot;older.15&quot;), levels=c(&quot;younger.15&quot;, &quot;older.15&quot;))
+pander(table(&quot;15학번 기준&quot; = ID.15, &quot;그룹&quot; = class_roll$group))</code></pre>
+<table style="width:42%;">
+<colgroup>
+<col width="23%"></col>
+<col width="8%"></col>
+<col width="9%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center"> </th>
+<th align="center">Red</th>
+<th align="center">Black</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center"><strong>younger.15</strong></td>
+<td align="center">24</td>
+<td align="center">26</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>older.15</strong></td>
+<td align="center">25</td>
+<td align="center">24</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>ID.14&lt;-factor(ifelse(substr(class_roll$id, 1, 4) &gt;= 2014, &quot;younger.14&quot;, &quot;older.14&quot;), levels=c(&quot;younger.14&quot;, &quot;older.14&quot;))
+pander(table(&quot;14학번 기준&quot; = ID.14, &quot;그룹&quot; = class_roll$group))</code></pre>
+<table style="width:42%;">
+<colgroup>
+<col width="23%"></col>
+<col width="8%"></col>
+<col width="9%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center"> </th>
+<th align="center">Red</th>
+<th align="center">Black</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center"><strong>younger.14</strong></td>
+<td align="center">30</td>
+<td align="center">31</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>older.14</strong></td>
+<td align="center">19</td>
+<td align="center">19</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>ID.13&lt;-factor(ifelse(substr(class_roll$id, 1, 4) &gt;= 2013, &quot;younger.13&quot;, &quot;older.13&quot;), levels=c(&quot;younger.13&quot;, &quot;older.13&quot;))
+pander(table(&quot;13학번 기준&quot; = ID.13, &quot;그룹&quot; = class_roll$group))</code></pre>
+<table style="width:42%;">
+<colgroup>
+<col width="23%"></col>
+<col width="8%"></col>
+<col width="9%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center"> </th>
+<th align="center">Red</th>
+<th align="center">Black</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center"><strong>younger.13</strong></td>
+<td align="center">43</td>
+<td align="center">40</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>older.13</strong></td>
+<td align="center">6</td>
+<td align="center">10</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>ID.12&lt;-factor(ifelse(substr(class_roll$id, 1, 4) &gt;= 2012, &quot;younger.12&quot;, &quot;older.12&quot;), levels=c(&quot;younger.12&quot;, &quot;older.12&quot;))
+pander(table(&quot;12학번 기준&quot; = ID.12, &quot;그룹&quot; = class_roll$group))</code></pre>
+<table style="width:42%;">
+<colgroup>
+<col width="23%"></col>
+<col width="8%"></col>
+<col width="9%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center"> </th>
+<th align="center">Red</th>
+<th align="center">Black</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center"><strong>younger.12</strong></td>
+<td align="center">47</td>
+<td align="center">45</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>older.12</strong></td>
+<td align="center">2</td>
+<td align="center">5</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>odd.even &lt;- as.numeric(class_roll$id) %% 2
+pander(table(&quot;odd_even&quot; = odd.even, &quot;Group&quot;= class_roll$group))</code></pre>
+<table style="width:29%;">
+<colgroup>
+<col width="11%"></col>
+<col width="8%"></col>
+<col width="9%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left"> </th>
+<th align="center">Red</th>
+<th align="center">Black</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>0</strong></td>
+<td align="center">19</td>
+<td align="center">23</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>1</strong></td>
+<td align="center">30</td>
+<td align="center">27</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>e.mail.list &lt;- strsplit(class_roll$e.mail, &quot;@&quot;, fixed = TRUE)
+mail.com &lt;- mapply(&quot;[&quot;, e.mail.list, 2)
+pander(table(&quot;e-mail&quot; = mail.com, &quot;그룹&quot; = class_roll$group))</code></pre>
+<table style="width:43%;">
+<colgroup>
+<col width="25%"></col>
+<col width="8%"></col>
+<col width="9%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center"> </th>
+<th align="center">Red</th>
+<th align="center">Black</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center"><strong>daum.net</strong></td>
+<td align="center">2</td>
+<td align="center">1</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>gmail.com</strong></td>
+<td align="center">1</td>
+<td align="center">3</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>hanmail.net</strong></td>
+<td align="center">4</td>
+<td align="center">1</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>nate.com</strong></td>
+<td align="center">2</td>
+<td align="center">3</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>naver.com</strong></td>
+<td align="center">40</td>
+<td align="center">42</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>f.name &lt;- substring(class_roll$name, first = 1, last = 1)
+pander(table(&quot;Family Name&quot; =f.name, &quot;Group&quot; = class_roll$group))</code></pre>
+<table style="width:31%;">
+<colgroup>
+<col width="12%"></col>
+<col width="8%"></col>
+<col width="9%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center"> </th>
+<th align="center">Red</th>
+<th align="center">Black</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center"><strong>강</strong></td>
+<td align="center">1</td>
+<td align="center">1</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>고</strong></td>
+<td align="center">2</td>
+<td align="center">0</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>권</strong></td>
+<td align="center">1</td>
+<td align="center">1</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>김</strong></td>
+<td align="center">7</td>
+<td align="center">10</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>노</strong></td>
+<td align="center">1</td>
+<td align="center">0</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>모</strong></td>
+<td align="center">0</td>
+<td align="center">1</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>문</strong></td>
+<td align="center">0</td>
+<td align="center">2</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>박</strong></td>
+<td align="center">6</td>
+<td align="center">3</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>배</strong></td>
+<td align="center">1</td>
+<td align="center">0</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>서</strong></td>
+<td align="center">0</td>
+<td align="center">1</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>손</strong></td>
+<td align="center">0</td>
+<td align="center">1</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>송</strong></td>
+<td align="center">1</td>
+<td align="center">0</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>신</strong></td>
+<td align="center">1</td>
+<td align="center">2</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>안</strong></td>
+<td align="center">2</td>
+<td align="center">1</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>양</strong></td>
+<td align="center">0</td>
+<td align="center">1</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>엄</strong></td>
+<td align="center">1</td>
+<td align="center">0</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>염</strong></td>
+<td align="center">0</td>
+<td align="center">1</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>오</strong></td>
+<td align="center">1</td>
+<td align="center">2</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>유</strong></td>
+<td align="center">1</td>
+<td align="center">1</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>이</strong></td>
+<td align="center">6</td>
+<td align="center">6</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>인</strong></td>
+<td align="center">1</td>
+<td align="center">0</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>임</strong></td>
+<td align="center">4</td>
+<td align="center">0</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>장</strong></td>
+<td align="center">0</td>
+<td align="center">1</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>전</strong></td>
+<td align="center">1</td>
+<td align="center">2</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>정</strong></td>
+<td align="center">5</td>
+<td align="center">0</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>조</strong></td>
+<td align="center">1</td>
+<td align="center">3</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>지</strong></td>
+<td align="center">0</td>
+<td align="center">1</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>최</strong></td>
+<td align="center">3</td>
+<td align="center">4</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>한</strong></td>
+<td align="center">0</td>
+<td align="center">3</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>허</strong></td>
+<td align="center">1</td>
+<td align="center">1</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>현</strong></td>
+<td align="center">1</td>
+<td align="center">0</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>황</strong></td>
+<td align="center">0</td>
+<td align="center">1</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>pander(class_roll)</code></pre>
+<table>
+<colgroup>
+<col width="25%"></col>
+<col width="9%"></col>
+<col width="7%"></col>
+<col width="7%"></col>
+<col width="27%"></col>
+<col width="15%"></col>
+<col width="7%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">dept</th>
+<th align="center">id</th>
+<th align="center">name</th>
+<th align="center">year</th>
+<th align="center">e.mail</th>
+<th align="center">cell.no</th>
+<th align="center">group</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">법학과</td>
+<td align="center">20152701</td>
+<td align="center">강민수</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:o.sweetie@daum.net">o.sweetie@daum.net</a></td>
+<td align="center">010-4298-1565</td>
+<td align="center">Red</td>
+</tr>
+<tr class="even">
+<td align="center">응용광물리학과</td>
+<td align="center">20113501</td>
+<td align="center">강현모</td>
+<td align="center">4</td>
+<td align="center"><a href="mailto:afafgg12_13@naver.com">afafgg12_13@naver.com</a></td>
+<td align="center">010-2285-6757</td>
+<td align="center">Black</td>
+</tr>
+<tr class="odd">
+<td align="center">전자공학과</td>
+<td align="center">20135201</td>
+<td align="center">고용빈</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:kowc831@naver.com">kowc831@naver.com</a></td>
+<td align="center">010-3087-8025</td>
+<td align="center">Red</td>
+</tr>
+<tr class="even">
+<td align="center">법학과</td>
+<td align="center">20152703</td>
+<td align="center">고지은</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:kje0769@hanmail.net">kje0769@hanmail.net</a></td>
+<td align="center">010-5540-0454</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">법학과</td>
+<td align="center">20152704</td>
+<td align="center">권리아</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:rnjsfldk12@naver.com">rnjsfldk12@naver.com</a></td>
+<td align="center">010-6807-3100</td>
+<td align="center">Red</td>
+</tr>
+<tr class="even">
+<td align="center">융합소프트웨어학과</td>
+<td align="center">20135304</td>
+<td align="center">권혁준</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:joon5125@naver.com">joon5125@naver.com</a></td>
+<td align="center">010-8733-5125</td>
+<td align="center">Black</td>
+</tr>
+<tr class="odd">
+<td align="center">간호학</td>
+<td align="center">20166209</td>
+<td align="center">김가람</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:garam1997@naver.com">garam1997@naver.com</a></td>
+<td align="center">010-4254-7661</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">융합신소재공학과</td>
+<td align="center">20165402</td>
+<td align="center">김도우</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:3720kdw@naver.com">3720kdw@naver.com</a></td>
+<td align="center">010-5138-3720</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">경영학과</td>
+<td align="center">20162817</td>
+<td align="center">김문규</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:mellion7410@naver.com">mellion7410@naver.com</a></td>
+<td align="center">010-9250-6284</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">컴퓨터공학과</td>
+<td align="center">20155110</td>
+<td align="center">김민정</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:akkmjj@naver.com">akkmjj@naver.com</a></td>
+<td align="center">010-4184-8659</td>
+<td align="center">Black</td>
+</tr>
+<tr class="odd">
+<td align="center">경영학과</td>
+<td align="center">20162819</td>
+<td align="center">김민정</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:m2343m62@naver.com">m2343m62@naver.com</a></td>
+<td align="center">010-6241-4993</td>
+<td align="center">Red</td>
+</tr>
+<tr class="even">
+<td align="center">언론방송융합미디어전공</td>
+<td align="center">20132663</td>
+<td align="center">김민지</td>
+<td align="center">3</td>
+<td align="center"><a href="mailto:alslwkim76@naver.com">alslwkim76@naver.com</a></td>
+<td align="center">010-2084-7263</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">경영학과</td>
+<td align="center">20162820</td>
+<td align="center">김민철</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:min972003@naver.com">min972003@naver.com</a></td>
+<td align="center">010-9131-9796</td>
+<td align="center">Red</td>
+</tr>
+<tr class="even">
+<td align="center">화학과</td>
+<td align="center">20153607</td>
+<td align="center">김병욱</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:sisiusa9@naver.com">sisiusa9@naver.com</a></td>
+<td align="center">010-6398-7856</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">생명과학과</td>
+<td align="center">20143710</td>
+<td align="center">김성희</td>
+<td align="center">3</td>
+<td align="center"><a href="mailto:sunghee12067@naver.com">sunghee12067@naver.com</a></td>
+<td align="center">010-5067-3094</td>
+<td align="center">Red</td>
+</tr>
+<tr class="even">
+<td align="center">컴퓨터공학과</td>
+<td align="center">20155113</td>
+<td align="center">김솔이</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:nisi96@naver.com">nisi96@naver.com</a></td>
+<td align="center">010-5359-5773</td>
+<td align="center">Black</td>
+</tr>
+<tr class="odd">
+<td align="center">경영학과</td>
+<td align="center">20162824</td>
+<td align="center">김영민</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:kkd04192@naver.com">kkd04192@naver.com</a></td>
+<td align="center">010-3145-2655</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">경영학과</td>
+<td align="center">20152832</td>
+<td align="center">김정인</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:2540298@naver.com">2540298@naver.com</a></td>
+<td align="center">010-4802-6298</td>
+<td align="center">Black</td>
+</tr>
+<tr class="odd">
+<td align="center">경영학과</td>
+<td align="center">20162832</td>
+<td align="center">김지수</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:rlawltn4766@naver.com">rlawltn4766@naver.com</a></td>
+<td align="center">010-4766-8836</td>
+<td align="center">Red</td>
+</tr>
+<tr class="even">
+<td align="center">융합신소재공학과</td>
+<td align="center">20145411</td>
+<td align="center">김지은</td>
+<td align="center">3</td>
+<td align="center"><a href="mailto:milk-kje1014@daum.net">milk-kje1014@daum.net</a></td>
+<td align="center">010-4212-4066</td>
+<td align="center">Black</td>
+</tr>
+<tr class="odd">
+<td align="center">융합소프트웨어학과</td>
+<td align="center">20135315</td>
+<td align="center">김청호</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:musoul12@nate.com">musoul12@nate.com</a></td>
+<td align="center">010-8573-4020</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">컴퓨터공학과</td>
+<td align="center">20155118</td>
+<td align="center">김태훈</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:kth_1126@naver.com">kth_1126@naver.com</a></td>
+<td align="center">010-5369-8056</td>
+<td align="center">Black</td>
+</tr>
+<tr class="odd">
+<td align="center">환경생명공학과</td>
+<td align="center">20153940</td>
+<td align="center">김하은</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:hwk1210@naver.com">hwk1210@naver.com</a></td>
+<td align="center">010-9867-6612</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">응용광물리학과</td>
+<td align="center">20133504</td>
+<td align="center">노재환</td>
+<td align="center">4</td>
+<td align="center"><a href="mailto:nojh94@naver.com">nojh94@naver.com</a></td>
+<td align="center">010-8889-8085</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">경제학과</td>
+<td align="center">20163013</td>
+<td align="center">모미선</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:altjs1325@naver.com">altjs1325@naver.com</a></td>
+<td align="center">010-8502-2231</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">법학과</td>
+<td align="center">20142726</td>
+<td align="center">문수진</td>
+<td align="center">3</td>
+<td align="center"><a href="mailto:ansdj8260@naver.com">ansdj8260@naver.com</a></td>
+<td align="center">010-4420-8251</td>
+<td align="center">Black</td>
+</tr>
+<tr class="odd">
+<td align="center">융합신소재공학과</td>
+<td align="center">20165410</td>
+<td align="center">문제철</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:moun1204@naver.com">moun1204@naver.com</a></td>
+<td align="center">010-5544-7635</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">경영학과</td>
+<td align="center">20132844</td>
+<td align="center">박경국</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:prudrnr@naver.com">prudrnr@naver.com</a></td>
+<td align="center">010-9419-6340</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">간호학</td>
+<td align="center">20156238</td>
+<td align="center">박다미</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:qkrekal38@naver.com">qkrekal38@naver.com</a></td>
+<td align="center">010-7558-3504</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">청각학전공</td>
+<td align="center">20154219</td>
+<td align="center">박다솜</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:qkrektha222@naver.com">qkrektha222@naver.com</a></td>
+<td align="center">010-4634-6656</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">융합소프트웨어학과</td>
+<td align="center">20135322</td>
+<td align="center">박상욱</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:tkddnrdlsp@naver.com">tkddnrdlsp@naver.com</a></td>
+<td align="center">010-7187-9910</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">법학과</td>
+<td align="center">20142728</td>
+<td align="center">박성은</td>
+<td align="center">3</td>
+<td align="center"><a href="mailto:tjddms8183@nate.com">tjddms8183@nate.com</a></td>
+<td align="center">010-6863-0519</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">융합신소재공학과</td>
+<td align="center">20165413</td>
+<td align="center">박용희</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:pyh2117@naver.com">pyh2117@naver.com</a></td>
+<td align="center">010-2494-8697</td>
+<td align="center">Red</td>
+</tr>
+<tr class="even">
+<td align="center">중국학과</td>
+<td align="center">20151518</td>
+<td align="center">박채영</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:coduddlsla21@naver.com">coduddlsla21@naver.com</a></td>
+<td align="center">010-4199-9549</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">간호학</td>
+<td align="center">20166236</td>
+<td align="center">박현진</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:guswls5686@naver.com">guswls5686@naver.com</a></td>
+<td align="center">010-5621-5686</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">전자공학과</td>
+<td align="center">20115228</td>
+<td align="center">박호균</td>
+<td align="center">3</td>
+<td align="center"><a href="mailto:guardiankyun@naver.com">guardiankyun@naver.com</a></td>
+<td align="center">010-5359-8819</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">중국학과</td>
+<td align="center">20151519</td>
+<td align="center">배유진</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:yjbhe@hanmail.net">yjbhe@hanmail.net</a></td>
+<td align="center">010-7476-3027</td>
+<td align="center">Red</td>
+</tr>
+<tr class="even">
+<td align="center">청각학전공</td>
+<td align="center">20114229</td>
+<td align="center">서형범</td>
+<td align="center">4</td>
+<td align="center"><a href="mailto:seo0201kr@naver.com">seo0201kr@naver.com</a></td>
+<td align="center">010-7122-0629</td>
+<td align="center">Black</td>
+</tr>
+<tr class="odd">
+<td align="center">간호학</td>
+<td align="center">20166241</td>
+<td align="center">손원정</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:wjson3710@naver.com">wjson3710@naver.com</a></td>
+<td align="center">010-7756-3715</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">청각학전공</td>
+<td align="center">20154232</td>
+<td align="center">송혜인</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:hin7506@naver.com">hin7506@naver.com</a></td>
+<td align="center">010-7612-0511</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">컴퓨터공학과</td>
+<td align="center">20115143</td>
+<td align="center">신성진</td>
+<td align="center">4</td>
+<td align="center"><a href="mailto:billde1290@naver.com">billde1290@naver.com</a></td>
+<td align="center">010-2834-1290</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">화학과</td>
+<td align="center">20153617</td>
+<td align="center">신주현</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:wngus3512@naver.com">wngus3512@naver.com</a></td>
+<td align="center">010-4467-6335</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">응용광물리학과</td>
+<td align="center">20113519</td>
+<td align="center">신형화</td>
+<td align="center">4</td>
+<td align="center"><a href="mailto:shinrace0@naver.com">shinrace0@naver.com</a></td>
+<td align="center">010-7205-7486</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">융합신소재공학과</td>
+<td align="center">20165419</td>
+<td align="center">안용주</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:kum8025@naver.com">kum8025@naver.com</a></td>
+<td align="center">010-5364-4667</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">융합소프트웨어학과</td>
+<td align="center">20125321</td>
+<td align="center">안원용</td>
+<td align="center">3</td>
+<td align="center"><a href="mailto:zzklecck@naver.com">zzklecck@naver.com</a></td>
+<td align="center">010-7795-7205</td>
+<td align="center">Red</td>
+</tr>
+<tr class="even">
+<td align="center">전자공학과</td>
+<td align="center">20135227</td>
+<td align="center">안정희</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:qnlalfthsus1@naver.com">qnlalfthsus1@naver.com</a></td>
+<td align="center">010-2790-7237</td>
+<td align="center">Black</td>
+</tr>
+<tr class="odd">
+<td align="center">경제학과</td>
+<td align="center">20113136</td>
+<td align="center">양제영</td>
+<td align="center">4</td>
+<td align="center"><a href="mailto:reallyyjy@naver.com">reallyyjy@naver.com</a></td>
+<td align="center">010-7436-1220</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">환경생명공학과</td>
+<td align="center">20133915</td>
+<td align="center">엄태현</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:eyum516@nate.com">eyum516@nate.com</a></td>
+<td align="center">010-9075-8529</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">융합소프트웨어학과</td>
+<td align="center">20125323</td>
+<td align="center">염철진</td>
+<td align="center">3</td>
+<td align="center"><a href="mailto:nacw69@nate.com">nacw69@nate.com</a></td>
+<td align="center">010-3871-4550</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">컴퓨터공학과</td>
+<td align="center">20155141</td>
+<td align="center">오석준</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:seok982@naver.com">seok982@naver.com</a></td>
+<td align="center">010-4766-7866</td>
+<td align="center">Black</td>
+</tr>
+<tr class="odd">
+<td align="center">전자공학과</td>
+<td align="center">20125238</td>
+<td align="center">오원제</td>
+<td align="center">3</td>
+<td align="center"><a href="mailto:dhdnjswpdh@naver.com">dhdnjswpdh@naver.com</a></td>
+<td align="center">010-9416-0620</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">융합신소재공학과</td>
+<td align="center">20155420</td>
+<td align="center">오윤재</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:ohyj1996@naver.com">ohyj1996@naver.com</a></td>
+<td align="center">010-5150-9025</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">전자공학과</td>
+<td align="center">20135231</td>
+<td align="center">유병호</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:dbqudgh137@naver.com">dbqudgh137@naver.com</a></td>
+<td align="center">010-9323-4291</td>
+<td align="center">Red</td>
+</tr>
+<tr class="even">
+<td align="center">융합신소재공학과</td>
+<td align="center">20155422</td>
+<td align="center">유재선</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:abalon1996@naver.com">abalon1996@naver.com</a></td>
+<td align="center">010-5039-5547</td>
+<td align="center">Black</td>
+</tr>
+<tr class="odd">
+<td align="center">경영학과</td>
+<td align="center">20132895</td>
+<td align="center">이기훈</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:aiomas@naver.com">aiomas@naver.com</a></td>
+<td align="center">010-2699-0631</td>
+<td align="center">Red</td>
+</tr>
+<tr class="even">
+<td align="center">재무금융학과</td>
+<td align="center">20163127</td>
+<td align="center">이상원</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:zldnjdiwl2@naver.com">zldnjdiwl2@naver.com</a></td>
+<td align="center">010-3262-7562</td>
+<td align="center">Black</td>
+</tr>
+<tr class="odd">
+<td align="center">경제학과</td>
+<td align="center">20123151</td>
+<td align="center">이순재</td>
+<td align="center">3</td>
+<td align="center"><a href="mailto:tnswo2686@naver.com">tnswo2686@naver.com</a></td>
+<td align="center">010-4725-2686</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">법학과</td>
+<td align="center">20152757</td>
+<td align="center">이슬</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:ls5555@naver.com">ls5555@naver.com</a></td>
+<td align="center">010-9427-4546</td>
+<td align="center">Black</td>
+</tr>
+<tr class="odd">
+<td align="center">융합소프트웨어학과</td>
+<td align="center">20145333</td>
+<td align="center">이아림</td>
+<td align="center">3</td>
+<td align="center"><a href="mailto:ehddk999@gmail.com">ehddk999@gmail.com</a></td>
+<td align="center">010-8508-5438</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">전자공학과</td>
+<td align="center">20135241</td>
+<td align="center">이재훈</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:dlwogns3000@naver.com">dlwogns3000@naver.com</a></td>
+<td align="center">010-6739-1135</td>
+<td align="center">Black</td>
+</tr>
+<tr class="odd">
+<td align="center">응용광물리학과</td>
+<td align="center">20123527</td>
+<td align="center">이정우</td>
+<td align="center">3</td>
+<td align="center"><a href="mailto:dlwjddn1992@naver.com">dlwjddn1992@naver.com</a></td>
+<td align="center">010-6214-6209</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">철학전공</td>
+<td align="center">20151329</td>
+<td align="center">이주현</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:juhyunkbstar@naver.com">juhyunkbstar@naver.com</a></td>
+<td align="center">010-6347-8550</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">전자공학과</td>
+<td align="center">20145246</td>
+<td align="center">이지연</td>
+<td align="center">3</td>
+<td align="center"><a href="mailto:villain77777@gmail.com">villain77777@gmail.com</a></td>
+<td align="center">010-5030-0679</td>
+<td align="center">Red</td>
+</tr>
+<tr class="even">
+<td align="center">화학과</td>
+<td align="center">20153627</td>
+<td align="center">이학무</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:dlgkran430@naver.com">dlgkran430@naver.com</a></td>
+<td align="center">010-9184-8731</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">경영학과</td>
+<td align="center">20102920</td>
+<td align="center">이혁진</td>
+<td align="center">4</td>
+<td align="center"><a href="mailto:hjlekzm1991@hanmail.net">hjlekzm1991@hanmail.net</a></td>
+<td align="center">010-8630-9616</td>
+<td align="center">Red</td>
+</tr>
+<tr class="even">
+<td align="center">심리학과</td>
+<td align="center">20132133</td>
+<td align="center">이현호</td>
+<td align="center">4</td>
+<td align="center"><a href="mailto:wdb1414@naver.com">wdb1414@naver.com</a></td>
+<td align="center">010-2296-6890</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">경영학과</td>
+<td align="center">20162895</td>
+<td align="center">인소영</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:dlsthdud0624@naver.com">dlsthdud0624@naver.com</a></td>
+<td align="center">010-9470-7005</td>
+<td align="center">Red</td>
+</tr>
+<tr class="even">
+<td align="center">법학과</td>
+<td align="center">20152765</td>
+<td align="center">임보라</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:borabora0629@hanmail.net">borabora0629@hanmail.net</a></td>
+<td align="center">010-3085-9566</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">경제학과</td>
+<td align="center">20143151</td>
+<td align="center">임보령</td>
+<td align="center">3</td>
+<td align="center"><a href="mailto:mickeyfood@naver.com">mickeyfood@naver.com</a></td>
+<td align="center">010-5386-1912</td>
+<td align="center">Red</td>
+</tr>
+<tr class="even">
+<td align="center">심리학과</td>
+<td align="center">20132134</td>
+<td align="center">임소윤</td>
+<td align="center">4</td>
+<td align="center"><a href="mailto:0182lsy@naver.com">0182lsy@naver.com</a></td>
+<td align="center">010-4991-1456</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">언론방송융합미디어전공</td>
+<td align="center">20122619</td>
+<td align="center">임희준</td>
+<td align="center">3</td>
+<td align="center"><a href="mailto:onam4606@daum.net">onam4606@daum.net</a></td>
+<td align="center">010-7456-4123</td>
+<td align="center">Red</td>
+</tr>
+<tr class="even">
+<td align="center">융합소프트웨어학과</td>
+<td align="center">20135345</td>
+<td align="center">장정길</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:wjdrlf5851@gmail.com">wjdrlf5851@gmail.com</a></td>
+<td align="center">010-8672-5851</td>
+<td align="center">Black</td>
+</tr>
+<tr class="odd">
+<td align="center">재무금융학과</td>
+<td align="center">20163136</td>
+<td align="center">전승윤</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:jjjr0817@naver.com">jjjr0817@naver.com</a></td>
+<td align="center">010-3392-8339</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">화학과</td>
+<td align="center">20153628</td>
+<td align="center">전인창</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:wjsdlsckd123@nate.com">wjsdlsckd123@nate.com</a></td>
+<td align="center">010-3322-9671</td>
+<td align="center">Black</td>
+</tr>
+<tr class="odd">
+<td align="center">융합신소재공학과</td>
+<td align="center">20165427</td>
+<td align="center">전현종</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:gs486ek11@naver.com">gs486ek11@naver.com</a></td>
+<td align="center">010-2386-9360</td>
+<td align="center">Red</td>
+</tr>
+<tr class="even">
+<td align="center">전자공학과</td>
+<td align="center">20135251</td>
+<td align="center">정규성</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:tizmrmfoq@naver.com">tizmrmfoq@naver.com</a></td>
+<td align="center">010-8011-1368</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">전자공학과</td>
+<td align="center">20145271</td>
+<td align="center">정예은</td>
+<td align="center">3</td>
+<td align="center"><a href="mailto:kop199@naver.com">kop199@naver.com</a></td>
+<td align="center">010-7130-2436</td>
+<td align="center">Red</td>
+</tr>
+<tr class="even">
+<td align="center">융합신소재공학과</td>
+<td align="center">20155432</td>
+<td align="center">정예주</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:wdw0127@naver.com">wdw0127@naver.com</a></td>
+<td align="center">010-3173-2644</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">재무금융학과</td>
+<td align="center">20163138</td>
+<td align="center">정해석</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:tiya516@naver.com">tiya516@naver.com</a></td>
+<td align="center">010-6227-6890</td>
+<td align="center">Red</td>
+</tr>
+<tr class="even">
+<td align="center">청각학전공</td>
+<td align="center">20134255</td>
+<td align="center">정현경</td>
+<td align="center">4</td>
+<td align="center"><a href="mailto:jhk7662@naver.com">jhk7662@naver.com</a></td>
+<td align="center">010-6409-0420</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">환경생명공학과</td>
+<td align="center">20133931</td>
+<td align="center">조다은</td>
+<td align="center">4</td>
+<td align="center"><a href="mailto:alsdud335@naver.com">alsdud335@naver.com</a></td>
+<td align="center">010-9931-1597</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">정치행정학과</td>
+<td align="center">20122437</td>
+<td align="center">조진만</td>
+<td align="center">3</td>
+<td align="center"><a href="mailto:raridi21@gmail.com">raridi21@gmail.com</a></td>
+<td align="center">010-7225-0135</td>
+<td align="center">Black</td>
+</tr>
+<tr class="odd">
+<td align="center">화학과</td>
+<td align="center">20153630</td>
+<td align="center">조현아</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:clgk@naver.com">clgk@naver.com</a></td>
+<td align="center">010-5591-0794</td>
+<td align="center">Red</td>
+</tr>
+<tr class="even">
+<td align="center">생명과학과</td>
+<td align="center">20133747</td>
+<td align="center">조현준</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:whguswns89@naver.com">whguswns89@naver.com</a></td>
+<td align="center">010-5067-1643</td>
+<td align="center">Black</td>
+</tr>
+<tr class="odd">
+<td align="center">화학과</td>
+<td align="center">20153632</td>
+<td align="center">지훈배</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:kittyxyz@hanmail.net">kittyxyz@hanmail.net</a></td>
+<td align="center">010-8664-7034</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">융합소프트웨어학과</td>
+<td align="center">20145348</td>
+<td align="center">최수진</td>
+<td align="center">3</td>
+<td align="center"><a href="mailto:chltnwlsgkgk@naver.com">chltnwlsgkgk@naver.com</a></td>
+<td align="center">010-4008-5227</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">경제학과</td>
+<td align="center">20163046</td>
+<td align="center">최승혁</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:csh970711@naver.com">csh970711@naver.com</a></td>
+<td align="center">010-4664-4605</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">법학과</td>
+<td align="center">20122787</td>
+<td align="center">최아정</td>
+<td align="center">4</td>
+<td align="center"><a href="mailto:withbb@naver.com">withbb@naver.com</a></td>
+<td align="center">010-3699-2075</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">언어병리학전공</td>
+<td align="center">20154265</td>
+<td align="center">최유경</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:chldbrud64@naver.com">chldbrud64@naver.com</a></td>
+<td align="center">010-9572-5785</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">청각학전공</td>
+<td align="center">20144260</td>
+<td align="center">최인혁</td>
+<td align="center">3</td>
+<td align="center"><a href="mailto:inhyeki95@naver.com">inhyeki95@naver.com</a></td>
+<td align="center">010-2081-7122</td>
+<td align="center">Black</td>
+</tr>
+<tr class="odd">
+<td align="center">화학과</td>
+<td align="center">20163432</td>
+<td align="center">최재웅</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:cjw9608@naver.com">cjw9608@naver.com</a></td>
+<td align="center">010-7722-7385</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">환경생명공학과</td>
+<td align="center">20133943</td>
+<td align="center">최한림</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:hrch1004@naver.com">hrch1004@naver.com</a></td>
+<td align="center">010-9891-3255</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">융합소프트웨어학과</td>
+<td align="center">20135356</td>
+<td align="center">한민구</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:alsrnalsrn94@naver.com">alsrnalsrn94@naver.com</a></td>
+<td align="center">010-3454-7128</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">경영학과</td>
+<td align="center">20162920</td>
+<td align="center">한승후</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:wnsqja4777@naver.com">wnsqja4777@naver.com</a></td>
+<td align="center">010-2078-4777</td>
+<td align="center">Black</td>
+</tr>
+<tr class="odd">
+<td align="center">경영학과</td>
+<td align="center">20162923</td>
+<td align="center">한재혁</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:eoxhdfud9@naver.com">eoxhdfud9@naver.com</a></td>
+<td align="center">010-5635-2491</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">생명과학과</td>
+<td align="center">20133753</td>
+<td align="center">허탁성</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:gjxkrtjd2221@naver.com">gjxkrtjd2221@naver.com</a></td>
+<td align="center">010-3997-4664</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">융합소프트웨어학과</td>
+<td align="center">20145352</td>
+<td align="center">허해리</td>
+<td align="center">3</td>
+<td align="center"><a href="mailto:heri9505@naver.com">heri9505@naver.com</a></td>
+<td align="center">010-5597-4351</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">법학과</td>
+<td align="center">20122793</td>
+<td align="center">현서정</td>
+<td align="center">4</td>
+<td align="center"><a href="mailto:lovelytjwjd@naver.com">lovelytjwjd@naver.com</a></td>
+<td align="center">010-9359-6069</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">융합신소재공학과</td>
+<td align="center">20155437</td>
+<td align="center">황하은</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:dorapooh_@naver.com">dorapooh_@naver.com</a></td>
+<td align="center">010-3647-5723</td>
+<td align="center">Black</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>#table(&quot;단과대학&quot; = class_roll$college, &quot;그룹&quot; = class_roll$group)</code></pre>
 <P style="page-break-before:always">
-
-
--->
 <table style="width:33%;">
 <caption>Red</caption>
 <colgroup>
@@ -569,234 +1441,24 @@ pander(class_roll)
 </thead>
 <tbody>
 <tr class="odd">
-<td align="center"><strong>65</strong></td>
-<td align="center">20102920</td>
-<td align="center">이혁진</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>36</strong></td>
-<td align="center">20115228</td>
-<td align="center">박호균</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>71</strong></td>
-<td align="center">20122619</td>
-<td align="center">임희준</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>98</strong></td>
-<td align="center">20122793</td>
-<td align="center">현서정</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>45</strong></td>
-<td align="center">20125321</td>
-<td align="center">안원용</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>66</strong></td>
-<td align="center">20132133</td>
-<td align="center">이현호</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>70</strong></td>
-<td align="center">20132134</td>
-<td align="center">임소윤</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>12</strong></td>
-<td align="center">20132663</td>
-<td align="center">김민지</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>28</strong></td>
-<td align="center">20132844</td>
-<td align="center">박경국</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>55</strong></td>
-<td align="center">20132895</td>
-<td align="center">이기훈</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>24</strong></td>
-<td align="center">20133504</td>
-<td align="center">노재환</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>83</strong></td>
-<td align="center">20133747</td>
-<td align="center">조현준</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>96</strong></td>
-<td align="center">20133753</td>
-<td align="center">허탁성</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>48</strong></td>
-<td align="center">20133915</td>
-<td align="center">엄태현</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>80</strong></td>
-<td align="center">20133931</td>
-<td align="center">조다은</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>79</strong></td>
-<td align="center">20134255</td>
-<td align="center">정현경</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>3</strong></td>
-<td align="center">20135201</td>
-<td align="center">고용빈</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>53</strong></td>
-<td align="center">20135231</td>
-<td align="center">유병호</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>75</strong></td>
-<td align="center">20135251</td>
-<td align="center">정규성</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>92</strong></td>
-<td align="center">20135356</td>
-<td align="center">한민구</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>32</strong></td>
-<td align="center">20142728</td>
-<td align="center">박성은</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>69</strong></td>
-<td align="center">20143151</td>
-<td align="center">임보령</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>15</strong></td>
-<td align="center">20143710</td>
-<td align="center">김성희</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>63</strong></td>
-<td align="center">20145246</td>
-<td align="center">이지연</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>76</strong></td>
-<td align="center">20145271</td>
-<td align="center">정예은</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>62</strong></td>
-<td align="center">20151329</td>
-<td align="center">이주현</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>34</strong></td>
-<td align="center">20151518</td>
-<td align="center">박채영</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>37</strong></td>
-<td align="center">20151519</td>
-<td align="center">배유진</td>
-</tr>
-<tr class="odd">
 <td align="center"><strong>1</strong></td>
 <td align="center">20152701</td>
 <td align="center">강민수</td>
 </tr>
 <tr class="even">
+<td align="center"><strong>3</strong></td>
+<td align="center">20135201</td>
+<td align="center">고용빈</td>
+</tr>
+<tr class="odd">
 <td align="center"><strong>4</strong></td>
 <td align="center">20152703</td>
 <td align="center">고지은</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="center"><strong>5</strong></td>
 <td align="center">20152704</td>
 <td align="center">권리아</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>68</strong></td>
-<td align="center">20152765</td>
-<td align="center">임보라</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>14</strong></td>
-<td align="center">20153607</td>
-<td align="center">김병욱</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>42</strong></td>
-<td align="center">20153617</td>
-<td align="center">신주현</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>64</strong></td>
-<td align="center">20153627</td>
-<td align="center">이학무</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>30</strong></td>
-<td align="center">20154219</td>
-<td align="center">박다솜</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>40</strong></td>
-<td align="center">20154232</td>
-<td align="center">송혜인</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>88</strong></td>
-<td align="center">20154265</td>
-<td align="center">최유경</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>11</strong></td>
-<td align="center">20155110</td>
-<td align="center">김민정</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>52</strong></td>
-<td align="center">20155420</td>
-<td align="center">오윤재</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>77</strong></td>
-<td align="center">20155432</td>
-<td align="center">정예주</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>13</strong></td>
-<td align="center">20162820</td>
-<td align="center">김민철</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>19</strong></td>
-<td align="center">20162832</td>
-<td align="center">김지수</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>67</strong></td>
-<td align="center">20162895</td>
-<td align="center">인소영</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>86</strong></td>
-<td align="center">20163046</td>
-<td align="center">최승혁</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>78</strong></td>
-<td align="center">20163138</td>
-<td align="center">정해석</td>
 </tr>
 <tr class="odd">
 <td align="center"><strong>8</strong></td>
@@ -804,14 +1466,224 @@ pander(class_roll)
 <td align="center">김도우</td>
 </tr>
 <tr class="even">
+<td align="center"><strong>11</strong></td>
+<td align="center">20162819</td>
+<td align="center">김민정</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>12</strong></td>
+<td align="center">20132663</td>
+<td align="center">김민지</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>13</strong></td>
+<td align="center">20162820</td>
+<td align="center">김민철</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>14</strong></td>
+<td align="center">20153607</td>
+<td align="center">김병욱</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>15</strong></td>
+<td align="center">20143710</td>
+<td align="center">김성희</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>19</strong></td>
+<td align="center">20162832</td>
+<td align="center">김지수</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>24</strong></td>
+<td align="center">20133504</td>
+<td align="center">노재환</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>28</strong></td>
+<td align="center">20132844</td>
+<td align="center">박경국</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>30</strong></td>
+<td align="center">20154219</td>
+<td align="center">박다솜</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>32</strong></td>
+<td align="center">20142728</td>
+<td align="center">박성은</td>
+</tr>
+<tr class="even">
 <td align="center"><strong>33</strong></td>
 <td align="center">20165413</td>
 <td align="center">박용희</td>
 </tr>
 <tr class="odd">
+<td align="center"><strong>34</strong></td>
+<td align="center">20151518</td>
+<td align="center">박채영</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>36</strong></td>
+<td align="center">20115228</td>
+<td align="center">박호균</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>37</strong></td>
+<td align="center">20151519</td>
+<td align="center">배유진</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>40</strong></td>
+<td align="center">20154232</td>
+<td align="center">송혜인</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>42</strong></td>
+<td align="center">20153617</td>
+<td align="center">신주현</td>
+</tr>
+<tr class="even">
 <td align="center"><strong>44</strong></td>
 <td align="center">20165419</td>
 <td align="center">안용주</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>45</strong></td>
+<td align="center">20125321</td>
+<td align="center">안원용</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>48</strong></td>
+<td align="center">20133915</td>
+<td align="center">엄태현</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>52</strong></td>
+<td align="center">20155420</td>
+<td align="center">오윤재</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>53</strong></td>
+<td align="center">20135231</td>
+<td align="center">유병호</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>55</strong></td>
+<td align="center">20132895</td>
+<td align="center">이기훈</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>62</strong></td>
+<td align="center">20151329</td>
+<td align="center">이주현</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>63</strong></td>
+<td align="center">20145246</td>
+<td align="center">이지연</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>64</strong></td>
+<td align="center">20153627</td>
+<td align="center">이학무</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>65</strong></td>
+<td align="center">20102920</td>
+<td align="center">이혁진</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>66</strong></td>
+<td align="center">20132133</td>
+<td align="center">이현호</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>67</strong></td>
+<td align="center">20162895</td>
+<td align="center">인소영</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>68</strong></td>
+<td align="center">20152765</td>
+<td align="center">임보라</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>69</strong></td>
+<td align="center">20143151</td>
+<td align="center">임보령</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>70</strong></td>
+<td align="center">20132134</td>
+<td align="center">임소윤</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>71</strong></td>
+<td align="center">20122619</td>
+<td align="center">임희준</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>75</strong></td>
+<td align="center">20165427</td>
+<td align="center">전현종</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>76</strong></td>
+<td align="center">20135251</td>
+<td align="center">정규성</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>77</strong></td>
+<td align="center">20145271</td>
+<td align="center">정예은</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>78</strong></td>
+<td align="center">20155432</td>
+<td align="center">정예주</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>79</strong></td>
+<td align="center">20163138</td>
+<td align="center">정해석</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>80</strong></td>
+<td align="center">20134255</td>
+<td align="center">정현경</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>83</strong></td>
+<td align="center">20153630</td>
+<td align="center">조현아</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>86</strong></td>
+<td align="center">20145348</td>
+<td align="center">최수진</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>88</strong></td>
+<td align="center">20122787</td>
+<td align="center">최아정</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>92</strong></td>
+<td align="center">20133943</td>
+<td align="center">최한림</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>96</strong></td>
+<td align="center">20133753</td>
+<td align="center">허탁성</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>98</strong></td>
+<td align="center">20122793</td>
+<td align="center">현서정</td>
 </tr>
 </tbody>
 </table>
@@ -832,179 +1704,19 @@ pander(class_roll)
 </thead>
 <tbody>
 <tr class="odd">
-<td align="center"><strong>47</strong></td>
-<td align="center">20113136</td>
-<td align="center">양제영</td>
-</tr>
-<tr class="even">
 <td align="center"><strong>2</strong></td>
 <td align="center">20113501</td>
 <td align="center">강현모</td>
 </tr>
-<tr class="odd">
-<td align="center"><strong>43</strong></td>
-<td align="center">20113519</td>
-<td align="center">신형화</td>
-</tr>
 <tr class="even">
-<td align="center"><strong>38</strong></td>
-<td align="center">20114229</td>
-<td align="center">서형범</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>41</strong></td>
-<td align="center">20115143</td>
-<td align="center">신성진</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>81</strong></td>
-<td align="center">20122437</td>
-<td align="center">조진만</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>87</strong></td>
-<td align="center">20122787</td>
-<td align="center">최아정</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>57</strong></td>
-<td align="center">20123151</td>
-<td align="center">이순재</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>61</strong></td>
-<td align="center">20123527</td>
-<td align="center">이정우</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>51</strong></td>
-<td align="center">20125238</td>
-<td align="center">오원제</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>49</strong></td>
-<td align="center">20125323</td>
-<td align="center">염철진</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>91</strong></td>
-<td align="center">20133943</td>
-<td align="center">최한림</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>46</strong></td>
-<td align="center">20135227</td>
-<td align="center">안정희</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>60</strong></td>
-<td align="center">20135241</td>
-<td align="center">이재훈</td>
-</tr>
-<tr class="odd">
 <td align="center"><strong>6</strong></td>
 <td align="center">20135304</td>
 <td align="center">권혁준</td>
 </tr>
-<tr class="even">
-<td align="center"><strong>21</strong></td>
-<td align="center">20135315</td>
-<td align="center">김청호</td>
-</tr>
 <tr class="odd">
-<td align="center"><strong>31</strong></td>
-<td align="center">20135322</td>
-<td align="center">박상욱</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>26</strong></td>
-<td align="center">20142726</td>
-<td align="center">문수진</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>89</strong></td>
-<td align="center">20144260</td>
-<td align="center">최인혁</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>59</strong></td>
-<td align="center">20145333</td>
-<td align="center">이아림</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>85</strong></td>
-<td align="center">20145348</td>
-<td align="center">최수진</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>97</strong></td>
-<td align="center">20145352</td>
-<td align="center">허해리</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>20</strong></td>
-<td align="center">20145411</td>
-<td align="center">김지은</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>58</strong></td>
-<td align="center">20152757</td>
-<td align="center">이슬</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>18</strong></td>
-<td align="center">20152832</td>
-<td align="center">김정인</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>73</strong></td>
-<td align="center">20153628</td>
-<td align="center">전인창</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>82</strong></td>
-<td align="center">20153630</td>
-<td align="center">조현아</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>84</strong></td>
-<td align="center">20153632</td>
-<td align="center">지훈배</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>23</strong></td>
-<td align="center">20153940</td>
-<td align="center">김하은</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>16</strong></td>
-<td align="center">20155113</td>
-<td align="center">김솔이</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>22</strong></td>
-<td align="center">20155118</td>
-<td align="center">김태훈</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>50</strong></td>
-<td align="center">20155141</td>
-<td align="center">오석준</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>54</strong></td>
-<td align="center">20155422</td>
-<td align="center">유재선</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>99</strong></td>
-<td align="center">20155437</td>
-<td align="center">황하은</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>29</strong></td>
-<td align="center">20156238</td>
-<td align="center">박다미</td>
+<td align="center"><strong>7</strong></td>
+<td align="center">20166209</td>
+<td align="center">김가람</td>
 </tr>
 <tr class="even">
 <td align="center"><strong>9</strong></td>
@@ -1013,23 +1725,43 @@ pander(class_roll)
 </tr>
 <tr class="odd">
 <td align="center"><strong>10</strong></td>
-<td align="center">20162819</td>
+<td align="center">20155110</td>
 <td align="center">김민정</td>
 </tr>
 <tr class="even">
+<td align="center"><strong>16</strong></td>
+<td align="center">20155113</td>
+<td align="center">김솔이</td>
+</tr>
+<tr class="odd">
 <td align="center"><strong>17</strong></td>
 <td align="center">20162824</td>
 <td align="center">김영민</td>
 </tr>
+<tr class="even">
+<td align="center"><strong>18</strong></td>
+<td align="center">20152832</td>
+<td align="center">김정인</td>
+</tr>
 <tr class="odd">
-<td align="center"><strong>93</strong></td>
-<td align="center">20162920</td>
-<td align="center">한승후</td>
+<td align="center"><strong>20</strong></td>
+<td align="center">20145411</td>
+<td align="center">김지은</td>
 </tr>
 <tr class="even">
-<td align="center"><strong>94</strong></td>
-<td align="center">20162923</td>
-<td align="center">한재혁</td>
+<td align="center"><strong>21</strong></td>
+<td align="center">20135315</td>
+<td align="center">김청호</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>22</strong></td>
+<td align="center">20155118</td>
+<td align="center">김태훈</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>23</strong></td>
+<td align="center">20153940</td>
+<td align="center">김하은</td>
 </tr>
 <tr class="odd">
 <td align="center"><strong>25</strong></td>
@@ -1037,19 +1769,9 @@ pander(class_roll)
 <td align="center">모미선</td>
 </tr>
 <tr class="even">
-<td align="center"><strong>56</strong></td>
-<td align="center">20163127</td>
-<td align="center">이상원</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>72</strong></td>
-<td align="center">20163136</td>
-<td align="center">전승윤</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>90</strong></td>
-<td align="center">20163432</td>
-<td align="center">최재웅</td>
+<td align="center"><strong>26</strong></td>
+<td align="center">20142726</td>
+<td align="center">문수진</td>
 </tr>
 <tr class="odd">
 <td align="center"><strong>27</strong></td>
@@ -1057,14 +1779,14 @@ pander(class_roll)
 <td align="center">문제철</td>
 </tr>
 <tr class="even">
-<td align="center"><strong>74</strong></td>
-<td align="center">20165427</td>
-<td align="center">전현종</td>
+<td align="center"><strong>29</strong></td>
+<td align="center">20156238</td>
+<td align="center">박다미</td>
 </tr>
 <tr class="odd">
-<td align="center"><strong>7</strong></td>
-<td align="center">20166209</td>
-<td align="center">김가람</td>
+<td align="center"><strong>31</strong></td>
+<td align="center">20135322</td>
+<td align="center">박상욱</td>
 </tr>
 <tr class="even">
 <td align="center"><strong>35</strong></td>
@@ -1072,14 +1794,164 @@ pander(class_roll)
 <td align="center">박현진</td>
 </tr>
 <tr class="odd">
+<td align="center"><strong>38</strong></td>
+<td align="center">20114229</td>
+<td align="center">서형범</td>
+</tr>
+<tr class="even">
 <td align="center"><strong>39</strong></td>
 <td align="center">20166241</td>
 <td align="center">손원정</td>
 </tr>
+<tr class="odd">
+<td align="center"><strong>41</strong></td>
+<td align="center">20115143</td>
+<td align="center">신성진</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>43</strong></td>
+<td align="center">20113519</td>
+<td align="center">신형화</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>46</strong></td>
+<td align="center">20135227</td>
+<td align="center">안정희</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>47</strong></td>
+<td align="center">20113136</td>
+<td align="center">양제영</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>49</strong></td>
+<td align="center">20125323</td>
+<td align="center">염철진</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>50</strong></td>
+<td align="center">20155141</td>
+<td align="center">오석준</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>51</strong></td>
+<td align="center">20125238</td>
+<td align="center">오원제</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>54</strong></td>
+<td align="center">20155422</td>
+<td align="center">유재선</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>56</strong></td>
+<td align="center">20163127</td>
+<td align="center">이상원</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>57</strong></td>
+<td align="center">20123151</td>
+<td align="center">이순재</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>58</strong></td>
+<td align="center">20152757</td>
+<td align="center">이슬</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>59</strong></td>
+<td align="center">20145333</td>
+<td align="center">이아림</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>60</strong></td>
+<td align="center">20135241</td>
+<td align="center">이재훈</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>61</strong></td>
+<td align="center">20123527</td>
+<td align="center">이정우</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>72</strong></td>
+<td align="center">20135345</td>
+<td align="center">장정길</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>73</strong></td>
+<td align="center">20163136</td>
+<td align="center">전승윤</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>74</strong></td>
+<td align="center">20153628</td>
+<td align="center">전인창</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>81</strong></td>
+<td align="center">20133931</td>
+<td align="center">조다은</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>82</strong></td>
+<td align="center">20122437</td>
+<td align="center">조진만</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>84</strong></td>
+<td align="center">20133747</td>
+<td align="center">조현준</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>85</strong></td>
+<td align="center">20153632</td>
+<td align="center">지훈배</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>87</strong></td>
+<td align="center">20163046</td>
+<td align="center">최승혁</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>89</strong></td>
+<td align="center">20154265</td>
+<td align="center">최유경</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>90</strong></td>
+<td align="center">20144260</td>
+<td align="center">최인혁</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>91</strong></td>
+<td align="center">20163432</td>
+<td align="center">최재웅</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>93</strong></td>
+<td align="center">20135356</td>
+<td align="center">한민구</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>94</strong></td>
+<td align="center">20162920</td>
+<td align="center">한승후</td>
+</tr>
 <tr class="even">
 <td align="center"><strong>95</strong></td>
-<td align="center">20166303</td>
-<td align="center">허소영</td>
+<td align="center">20162923</td>
+<td align="center">한재혁</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>97</strong></td>
+<td align="center">20145352</td>
+<td align="center">허해리</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>99</strong></td>
+<td align="center">20155437</td>
+<td align="center">황하은</td>
 </tr>
 </tbody>
 </table>

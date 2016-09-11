@@ -19,24 +19,27 @@ options(width=180)
 ```
 
 ```{r, data, echo = FALSE, results = 'hide'}
-quiz0907 <- read.xlsx("../data/quiz0907.xlsx", 1, startRow = 2, endRow = 102, colIndex = c(3:7, 9:14), colClasses=c(rep("character", 11)), stringsAsFactors=FALSE)
-str(quiz0907)
-names(quiz0907) <- c("dept", "id", "name", "year", "e.mail", "cell.no", "Q1", "Q2", "Q3", "Q4", "group")
-quiz0907$dept <- factor(quiz0907$dept)
-quiz0907$year <- factor(quiz0907$year)
-quiz0907$group <- factor(quiz0907$group, levels = c("Red", "Black"))
-quiz0907$Q1 <- factor(quiz0907$Q1, levels = c("가", "나", "다", "라"), labels = c("1/10", "1/15", "1/20", "1/30"))
-quiz0907$Q2 <- factor(quiz0907$Q2, levels = c("가", "나", "다", "라"), labels = c("15만호", "20만호", "44만호", "130만호"))
-quiz0907$Q3 <- factor(quiz0907$Q3, levels = c("가", "나", "다", "라", "마"), labels = c("경기", "평안", "전라", "경상", "충청"))
-quiz0907$Q4 <- factor(quiz0907$Q4, levels = c("가", "나", "다", "라", "마", "바"))
-quiz0907$Q4.2 <- quiz0907$Q4
-levels(quiz0907$Q4.2[quiz0907$group == "Black"]) <- c("마", "라", "다", "나", "가", "바")
-levels(quiz0907$Q4.2) <- c("A", "B", "C", "D", "E", "기타 또는 없음")
-str(quiz0907)
+quiz0907_test <- read.xlsx("../data/quiz0907_test.xlsx", 1, startRow = 2, endRow = 102, colIndex = c(3:7, 9:14), colClasses = c(rep("character", 11)), stringsAsFactors = FALSE)
+str(quiz0907_test)
+names(quiz0907_test) <- c("dept", "id", "name", "year", "e.mail", "cell.no", "Q1", "Q2", "Q3", "Q4", "group")
+na.group <- is.na(quiz0907_test$group)
+load("./red_and_black_160907_data.rda")
+quiz0907_test$group[na.group] <- levels(class_roll0907$group[na.group])
+quiz0907_test$dept <- factor(quiz0907_test$dept)
+quiz0907_test$year <- factor(quiz0907_test$year)
+quiz0907_test$group <- factor(quiz0907_test$group, levels = c("Red", "Black"))
+quiz0907_test$Q1 <- factor(quiz0907_test$Q1, levels = c("가", "나", "다", "라"), labels = c("1/10", "1/15", "1/20", "1/30"))
+quiz0907_test$Q2 <- factor(quiz0907_test$Q2, levels = c("가", "나", "다", "라"), labels = c("15만호", "20만호", "44만호", "130만호"))
+quiz0907_test$Q3 <- factor(quiz0907_test$Q3, levels = c("가", "나", "다", "라", "마"), labels = c("경기", "평안", "전라", "경상", "충청"))
+quiz0907_test$Q4 <- factor(quiz0907_test$Q4, levels = c("가", "나", "다", "라", "마", "바"))
+quiz0907_test$Q4.2 <- quiz0907_test$Q4
+levels(quiz0907_test$Q4.2[quiz0907_test$group == "Black"]) <- c("마", "라", "다", "나", "가", "바")
+levels(quiz0907_test$Q4.2) <- c("A", "B", "C", "D", "E", "기타 또는 없음")
+str(quiz0907_test)
 ```
 
 ```{r, randomization, echo = FALSE, results = 'hide'}
-pander(summary(quiz0907))
+pander(summary(quiz0907_test))
 ```
 
 ### 퀴즈 응답 비교
@@ -46,16 +49,16 @@ pander(summary(quiz0907))
 ##### 기본세율
 
 ```{r, National and Local tax, echo = FALSE}
-Q1.tbl.am <- addmargins(table(quiz0907$group, quiz0907$Q1, exclude = NULL), margin = 1)
+Q1.tbl.am <- addmargins(table(quiz0907_test$group, quiz0907_test$Q1, exclude = NULL), margin = 1)
 colnames(Q1.tbl.am)[5] <- "결석"
 rownames(Q1.tbl.am)[4] <- "계"
-pander(Q1.tbl.am)
+pander(Q1.tbl.am[-3, ])
 ```
 
 ##### 기본세율(%)
 
 ```{r, National and Local tax in percentage, echo = FALSE}
-pander(round(prop.table(Q1.tbl.am, margin=1)[4,]*100, digits=1))
+pander(round(prop.table(Q1.tbl.am, margin = 1)[4, ]*100, digits = 1))
 ```
 
 #### 1423년 조선시대 호구와 인구
@@ -63,10 +66,10 @@ pander(round(prop.table(Q1.tbl.am, margin=1)[4,]*100, digits=1))
 ##### 호구와 인구
 
 ```{r, tax law and cabinets, echo = FALSE}
-Q2.tbl.am <- addmargins(table(quiz0907$group, quiz0907$Q2, exclude = NULL), margin = 1)
+Q2.tbl.am <- addmargins(table(quiz0907_test$group, quiz0907_test$Q2, exclude = NULL), margin = 1)
 colnames(Q2.tbl.am)[5] <- "결석"
 rownames(Q2.tbl.am)[4] <- "계"
-pander(Q2.tbl.am)
+pander(Q2.tbl.am[-3, ])
 ```
 
 ##### 호구와 인구(%)
@@ -80,10 +83,10 @@ pander(round(prop.table(Q2.tbl.am, margin = 1)[4,]*100, digits=1), caption="공�
 ##### 찬반이 반대인 곳(집계표)
 
 ```{r, tax law and laymen, echo = FALSE}
-Q3.tbl.am <- addmargins(table(quiz0907$group, quiz0907$Q3, exclude = NULL), margin = 1)
+Q3.tbl.am <- addmargins(table(quiz0907_test$group, quiz0907_test$Q3, exclude = NULL), margin = 1)
 colnames(Q3.tbl.am)[6] <- "결석"
 rownames(Q3.tbl.am)[4] <- "계"
-pander(Q3.tbl.am)
+pander(Q3.tbl.am[-3, ])
 ```
 
 ##### 찬반이 반대인 곳(%)
@@ -99,18 +102,18 @@ pander(round(prop.table(Q3.tbl.am, margin=1)[4,]*100, digits=1), caption="품관
 ##### 가나다 순으로 후보 이름을 늘어놓는지(Red), 가나다 역순으로 후보 이름을 늘어놓는지(Black)에 따라 응답이 달라질 것으로 기대. Red 와 Black의 응답이 다르게 나타나고 있는 점에 유의. 후보들은 최근 여론조사에서 꾸준히 5% 이상 지지율을 얻고 있는 사람들로 선정.
 
 ```{r, outs merge, echo = FALSE}
-poll.tbl.e <- table(quiz0907$group, quiz0907$Q4.2, exclude = NULL)
+poll.tbl.e <- table(quiz0907_test$group, quiz0907_test$Q4.2, exclude = NULL)
 colnames(poll.tbl.e)[7] <- "결석"
-pander(poll.tbl.e, caption = "대선후보지지도")
+pander(poll.tbl.e[-3, ], caption = "대선후보지지도")
 ```
 
 ##### % 비교.  
 
 ```{r, outs merge in percentage, echo = FALSE}
-merge.tbl <- table(quiz0907$group, quiz0907$Q4.2)
+merge.tbl <- table(quiz0907_test$group, quiz0907_test$Q4.2)
 pander(round(prop.table(merge.tbl, margin = 1)*100, digits = 1))
 ```
 
 ```{r, save, echo = FALSE}
-#save.image("../R/quiz0907.rda")
+save.image("./quiz0907_test.rda")
 ```
