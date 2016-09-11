@@ -25,7 +25,7 @@ names(quiz0907) <- c("dept", "id", "name", "year", "e.mail", "cell.no", "Q1", "Q
 quiz0907$dept <- factor(quiz0907$dept)
 quiz0907$year <- factor(quiz0907$year)
 quiz0907$group <- factor(quiz0907$group, levels = c("Red", "Black"))
-quiz0907$Q1 <- factor(quiz0907$Q1, levels = c("가", "나", "다", "라"), labels = c("1/10", "1/15", "1/20", "1/30"))
+quiz0907$Q1 <- factor(quiz0907$Q1, levels = c("가", "나", "다", "라", "무응답"), labels = c("1/10", "1/15", "1/20", "1/30", "무응답"))
 quiz0907$Q2 <- factor(quiz0907$Q2, levels = c("가", "나", "다", "라"), labels = c("15만호", "20만호", "44만호", "130만호"))
 quiz0907$Q3 <- factor(quiz0907$Q3, levels = c("가", "나", "다", "라", "마"), labels = c("경기", "평안", "전라", "경상", "충청"))
 quiz0907$Q4 <- factor(quiz0907$Q4, levels = c("가", "나", "다", "라", "마", "바"))
@@ -47,7 +47,7 @@ pander(summary(quiz0907))
 
 ```{r, National and Local tax, echo = FALSE}
 Q1.tbl.am <- addmargins(table(quiz0907$group, quiz0907$Q1, exclude = NULL), margin = 1)
-colnames(Q1.tbl.am)[5] <- "결석"
+colnames(Q1.tbl.am)[6] <- "결석"
 rownames(Q1.tbl.am)[4] <- "계"
 pander(Q1.tbl.am)
 ```

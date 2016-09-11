@@ -15,7 +15,7 @@ library(knitr)
 panderOptions('table.split.table', Inf)
 panderOptions('table.alignment.rownames', 'left')
 panderOptions('table.alignment.default', 'right')
-options(width=180)
+options(width=180, digits = 2)
 ```
 
 ```{r, data, echo = FALSE, results = 'hide'}
@@ -28,7 +28,7 @@ quiz0907_test$group[na.group] <- levels(class_roll0907$group[na.group])
 quiz0907_test$dept <- factor(quiz0907_test$dept)
 quiz0907_test$year <- factor(quiz0907_test$year)
 quiz0907_test$group <- factor(quiz0907_test$group, levels = c("Red", "Black"))
-quiz0907_test$Q1 <- factor(quiz0907_test$Q1, levels = c("가", "나", "다", "라"), labels = c("1/10", "1/15", "1/20", "1/30"))
+quiz0907_test$Q1 <- factor(quiz0907_test$Q1, levels = c("가", "나", "다", "라", "무응답"), labels = c("1/10", "1/15", "1/20", "1/30", "무응답"))
 quiz0907_test$Q2 <- factor(quiz0907_test$Q2, levels = c("가", "나", "다", "라"), labels = c("15만호", "20만호", "44만호", "130만호"))
 quiz0907_test$Q3 <- factor(quiz0907_test$Q3, levels = c("가", "나", "다", "라", "마"), labels = c("경기", "평안", "전라", "경상", "충청"))
 quiz0907_test$Q4 <- factor(quiz0907_test$Q4, levels = c("가", "나", "다", "라", "마", "바"))
@@ -50,7 +50,7 @@ pander(summary(quiz0907_test))
 
 ```{r, National and Local tax, echo = FALSE}
 Q1.tbl.am <- addmargins(table(quiz0907_test$group, quiz0907_test$Q1, exclude = NULL), margin = 1)
-colnames(Q1.tbl.am)[5] <- "결석"
+colnames(Q1.tbl.am)[6] <- "결석"
 rownames(Q1.tbl.am)[4] <- "계"
 pander(Q1.tbl.am[-3, ])
 ```
@@ -58,7 +58,7 @@ pander(Q1.tbl.am[-3, ])
 ##### 기본세율(%)
 
 ```{r, National and Local tax in percentage, echo = FALSE}
-pander(round(prop.table(Q1.tbl.am, margin = 1)[4, ]*100, digits = 1))
+pander(format(prop.table(Q1.tbl.am, margin = 1)[4, ]*100, nsmall = 1))
 ```
 
 #### 1423년 조선시대 호구와 인구
@@ -75,7 +75,7 @@ pander(Q2.tbl.am[-3, ])
 ##### 호구와 인구(%)
 
 ```{r, tax law and cabinets in percentage, echo = FALSE}
-pander(round(prop.table(Q2.tbl.am, margin = 1)[4,]*100, digits=1), caption="공법도입과 대신들")
+pander(format(prop.table(Q2.tbl.am, margin = 1)[4,]*100, nsmall = 1), caption="공법도입과 대신들")
 ```
 
 #### 지방관료와 품관촌민
@@ -92,7 +92,7 @@ pander(Q3.tbl.am[-3, ])
 ##### 찬반이 반대인 곳(%)
 
 ```{r, tax law and laymen in percentage, echo = FALSE}
-pander(round(prop.table(Q3.tbl.am, margin=1)[4,]*100, digits=1), caption="품관촌민들의 찬반")
+pander(format(prop.table(Q3.tbl.am, margin = 1)[4, ]*100, nsmall = 1), caption="품관촌민들의 찬반")
 ```
 
 ### 대선 후보 지지도
@@ -111,7 +111,7 @@ pander(poll.tbl.e[-3, ], caption = "대선후보지지도")
 
 ```{r, outs merge in percentage, echo = FALSE}
 merge.tbl <- table(quiz0907_test$group, quiz0907_test$Q4.2)
-pander(round(prop.table(merge.tbl, margin = 1)*100, digits = 1))
+pander(format(prop.table(merge.tbl, margin = 1)*100, nsmall = 1), caption = "대선후보지지도")
 ```
 
 ```{r, save, echo = FALSE}

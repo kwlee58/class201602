@@ -3,5 +3,5 @@ account: rpubs
 server: rpubs.com
 appId: https://api.rpubs.com/api/v1/document/208333/47242ed157b94d2584c2265e197c650b
 bundleId: https://api.rpubs.com/api/v1/document/208333/47242ed157b94d2584c2265e197c650b
-url: http://rpubs.com/publish/claim/208333/2de45eadbaee4dd597fa5dd0975a8816
-when: 1473569923.98842
+url: http://rpubs.com/kwlee58/208333
+when: 1473607423.56554
