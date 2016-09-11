@@ -15,7 +15,7 @@ library(knitr)
 panderOptions('table.split.table', Inf)
 panderOptions('table.alignment.rownames', 'left')
 panderOptions('table.alignment.default', 'right')
-options(width=180)
+options(width=180, digits = 2)
 ```
 
 ```{r, data, echo = FALSE, results = 'hide'}
@@ -58,7 +58,7 @@ pander(Q1.tbl.am[-3, ])
 ##### 기본세율(%)
 
 ```{r, National and Local tax in percentage, echo = FALSE}
-pander(round(prop.table(Q1.tbl.am, margin = 1)[4, ]*100, digits = 1))
+pander(format(prop.table(Q1.tbl.am, margin = 1)[4, ]*100, nsmall = 1))
 ```
 
 #### 1423년 조선시대 호구와 인구
@@ -75,7 +75,7 @@ pander(Q2.tbl.am[-3, ])
 ##### 호구와 인구(%)
 
 ```{r, tax law and cabinets in percentage, echo = FALSE}
-pander(round(prop.table(Q2.tbl.am, margin = 1)[4,]*100, digits=1), caption="공법도입과 대신들")
+pander(format(prop.table(Q2.tbl.am, margin = 1)[4,]*100, nsmall = 1), caption="공법도입과 대신들")
 ```
 
 #### 지방관료와 품관촌민
@@ -92,7 +92,7 @@ pander(Q3.tbl.am[-3, ])
 ##### 찬반이 반대인 곳(%)
 
 ```{r, tax law and laymen in percentage, echo = FALSE}
-pander(round(prop.table(Q3.tbl.am, margin=1)[4,]*100, digits=1), caption="품관촌민들의 찬반")
+pander(format(prop.table(Q3.tbl.am, margin = 1)[4, ]*100, nsmall = 1), caption="품관촌민들의 찬반")
 ```
 
 ### 대선 후보 지지도
@@ -111,7 +111,7 @@ pander(poll.tbl.e[-3, ], caption = "대선후보지지도")
 
 ```{r, outs merge in percentage, echo = FALSE}
 merge.tbl <- table(quiz0907_test$group, quiz0907_test$Q4.2)
-pander(round(prop.table(merge.tbl, margin = 1)*100, digits = 1))
+pander(format(prop.table(merge.tbl, margin = 1)*100, nsmall = 1), caption = "대선후보지지도")
 ```
 
 ```{r, save, echo = FALSE}
