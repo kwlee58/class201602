@@ -8,7 +8,7 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 # install.packages("pander", repos = "https://cran.rstudio.com")
-# install.packages("xlsx", repos = "https://cran.rstudio.com")
+install.packages("xlsx", repos = "https://cran.rstudio.com")
 library(xlsx)
 library(pander)
 library(knitr)

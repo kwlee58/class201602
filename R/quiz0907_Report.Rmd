@@ -101,7 +101,7 @@ pander(round(prop.table(Q3.tbl.am, margin=1)[4,]*100, digits=1), caption="품관
 ```{r, outs merge, echo = FALSE}
 poll.tbl.e <- table(quiz0907$group, quiz0907$Q4.2, exclude = NULL)
 colnames(poll.tbl.e)[7] <- "결석"
-pander(poll.tbl.e, caption = "대선후보지지도")
+pander(poll.tbl.e[-3, ], caption = "대선후보지지도")
 ```
 
 ##### % 비교.  

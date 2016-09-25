@@ -95,6 +95,7 @@ pander(literacy)
 <!--* 채점표라는 의미의 `literacy.marks` 로 저장, (# 표시한 방식으로는 작동하지 않음)-->
     
 ```{r, marks, echo = FALSE}
+# 첫 세 학생의 응답을 기초로 확대, mapply()의 활용 방식에 유의
 literacy.marks.rw.q1_3 <- mapply(function(x, y) factor(ifelse(x == y, "R", "W")), y = ans.l.2[1:3], literacy[, 1:3])
 literacy.marks.rw <- mapply(function(x, y) factor(ifelse(x == y, "R", "W")), y = ans.l.2, literacy[, -26])
 # literacy.marks.rw <- mapply(function(x, y = ans.l.2) factor(ifelse(x == y, "R", "W")), literacy[, -26])
