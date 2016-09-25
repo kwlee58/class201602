@@ -8,7 +8,7 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 # install.packages("pander", repos = "https://cran.rstudio.com")
-# install.packages("xlsx", repos = "https://cran.rstudio.com")
+install.packages("xlsx", repos = "https://cran.rstudio.com")
 library(xlsx)
 library(pander)
 library(knitr)
@@ -71,7 +71,7 @@ lines(year, tax.2[, 20], type = "b", col = rainbow(10)[10])
 title(main = "국세", xlab = "연도", ylab = "납부액(조원)", cex.main = 2)
 text(x = 1994, y = tax.2[1, c(15, 2, 1)] + c(10, -10, 10), labels = tax.2[1, c(15, 2, 1)])
 text(x = 2014, y = tax.2[21, c(15, 2, 1)] + c(10, -10, 10), labels = tax.2[21, c(15, 2, 1)])
-text(x = 2004, y = tax.2[11, c(15, 2, 1)] + c(10, -10, 10), labels = c("교툥세 등", "내국세", "국세"))
+text(x = 2004, y = tax.2[11, c(15, 2, 1)] + c(10, -10, 10), labels = c("교통세 등", "내국세", "국세"))
 dev.copy(png, file ="../pics/national_tax.png", width = 960, height = 720)
 ```
 

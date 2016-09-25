@@ -25,7 +25,7 @@ reading <- read.xlsx("../data/reading160323.xlsx", 1, startRow = 4, endRow = 68,
 str(reading)
 head(reading)
 reading$group <- factor(reading$group, levels = c("Red", "Black"))
-reading$SQ2 <- factor(reading$SQ2, labels = c("남", "여"))
+reading$SQ2 <- factor(reading$SQ2, levels = 1:2, labels = c("남", "여"))
 reading$SQ3 <- factor(reading$SQ3, levels = 1:17, labels = c("서울", "부산", "대구", "인천", "광주", "대전", "울산", "경기", "강원", "충북", "충남", "전북", "전남", "경북", "경남", "제주", "세종"))
 reading$SQ3 <- droplevels(reading$SQ3)
 leasure.hours.wd <- round((reading$Q1.1.h*60 + reading$Q1.1.m)/60, digits = 2)
