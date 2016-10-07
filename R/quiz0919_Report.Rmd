@@ -49,7 +49,7 @@ pander(summary(quiz0919))
 Q1.tbl.am <- addmargins(table(quiz0919$group, quiz0919$Q1, exclude = NULL), margin = 1)
 colnames(Q1.tbl.am)[6] <- "결석"
 rownames(Q1.tbl.am)[4] <- "계"
-pander(Q1.tbl.am[-3, ], caption = "우리나라 해방짃후 비문해율?")
+pander(Q1.tbl.am[-3, ], caption = "우리나라 해방직후 비문해율?")
 ```
 
 ##### 비문해율(%)
