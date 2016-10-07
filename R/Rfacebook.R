@@ -1,8 +1,8 @@
 install.packages("Rfacebook")
-#install.packages("Rook")
+install.packages("Rook")
 install.packages("qdap")
 library(Rfacebook)
-#library(Rook)
+library(Rook)
 library(qdap)
 
 fb_oauth <- fbOAuth(app_id="1241897489200219", app_secret="7c7e9f2041f6ed04ff989cd061691f2b",extended_permissions=TRUE)
@@ -10,7 +10,7 @@ fb_oauth <- fbOAuth(app_id="1241897489200219", app_secret="7c7e9f2041f6ed04ff989
 #load("FBoauth")
 me <- getUsers("me", token=fb_oauth)
 me
-pgData <- getPage("stat.in.life", token=fb_oauth, since="2016/03/02", until="2016/06/28")
+pgData <- getPage("stat.in.life", token=fb_oauth, since="2016/08/30", until="2016/09/28")
 si <- subset(pgData, comments_count > 1)
 
 nop <- length(si$id)
