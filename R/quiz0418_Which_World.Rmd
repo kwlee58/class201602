@@ -98,6 +98,7 @@ pander(round(prop.table(addmargins(table(quiz0418$group, quiz0418$Q3, exclude = 
 ```{r, social comparison, echo = FALSE}
 tbl <- table(quiz0418$group, quiz0418$Q4.2, exclude = NULL)[1:2, ]
 tbl.a <- addmargins(tbl)
+colnames(tbl.a)[3:4] <- c("결석", "계")
 pander(tbl.a, caption="장기기증의사")
 ```
 

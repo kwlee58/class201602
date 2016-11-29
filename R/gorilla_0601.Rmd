@@ -10,11 +10,11 @@ output: html_document
 #### Read In
 
 ```{r, library and read, echo = FALSE, message = FALSE, results = 'hide'}
-# library(xlsx)
+library(xlsx)
 library(pander)
 library(ggplot2)
 options(digits=3)
-# gorilla <- read.xlsx("../data/gorilla0601.xlsx", 1, startRow = 2, endRow = 66, header = FALSE, colIndex = c(3:7, 9:31), colClasses = c(rep("character", 17), "numeric", "character", "numeric", rep("character", 6), "numeric", "character"))
+# gorilla <- read.xlsx("../../class201601/data/gorilla0601.xlsx", 1, startRow = 2, endRow = 66, header = FALSE, colIndex = c(3:7, 9:31), colClasses = c(rep("character", 17), "numeric", "character", "numeric", rep("character", 6), "numeric", "character"))
 load("./gorilla_0601.rda")
 str(gorilla)
 ```
