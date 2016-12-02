@@ -20,7 +20,7 @@ options(width = 180)
 BFI <- read.xlsx("../data/BFI_MI_1109v2.xlsx", sheetIndex = 1, startRow = 3, endRow = 97, colIndex = c(4:5, 11:22), header = FALSE)
 names(BFI) <- c("ID", "Name", "E1", "A1", "O1", "C1", "N1", "E2", "A2", "O2", "C2", "N2", "O3", "A3")
 pander(BFI)
-MI <- read.xlsx("../data/BFI_MI_1109.xlsx", sheetIndex = 1, startRow = 3, endRow = 97, colIndex = c(4, 28:84), header = FALSE)
+MI <- read.xlsx("../data/BFI_MI_1109v2.xlsx", sheetIndex = 1, startRow = 3, endRow = 97, colIndex = c(4, 28:84), header = FALSE)
 names(MI)[1] <- "ID"
 pander(MI[, 1:29])
 pander(MI[, c(1, 30:57)])
