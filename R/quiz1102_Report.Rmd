@@ -42,6 +42,7 @@ quiz1102$Q4 <- factor(quiz1102$Q4, levels = c("가", "나", "다", "라", "ㅁ�
 # quiz1102$Q4.2[quiz1102$group == "Red" & quiz1102$Q4.2 == "조퇴"] <- "조퇴"
 # quiz1102$Q4.2 <- factor(quiz1102$Q4.2, levels = c("탄핵", "하야", "아니다", "모르겠다", "조퇴"))
 str(quiz1102)
+
 ```
 
 ```{r, randomization, echo = FALSE, results = 'hide'}
@@ -57,14 +58,14 @@ pander(summary(quiz1102))
 ```{r, productivity vs wage, echo = FALSE}
 Q1.tbl.am <- addmargins(table(quiz1102$group, quiz1102$Q1, exclude = NULL), margin = 1)
 colnames(Q1.tbl.am)[5] <- "결석"
-rownames(Q1.tbl.am)[4] <- "계"
+rownames(Q1.tbl.am)[3] <- "계"
 pander(Q1.tbl.am[-3, ])
 ```
 
 ##### 평균임금과 중위 임금 (%)
 
 ```{r, productivity vs wage in percentage, echo = FALSE}
-pander(round(prop.table(Q1.tbl.am, margin = 1)[4, ]*100, digits = 1))
+pander(round(prop.table(Q1.tbl.am, margin = 1)[3, ]*100, digits = 1))
 ```
 
 #### LM3
@@ -74,14 +75,14 @@ pander(round(prop.table(Q1.tbl.am, margin = 1)[4, ]*100, digits = 1))
 ```{r, LM3, echo = FALSE}
 Q2.tbl.am <- addmargins(table(quiz1102$group, quiz1102$Q2, exclude = NULL), margin = 1)
 colnames(Q2.tbl.am)[5] <- "결석"
-rownames(Q2.tbl.am)[4] <- "계"
+rownames(Q2.tbl.am)[3] <- "계"
 pander(Q2.tbl.am[-3, ])
 ```
 
 ##### 
 
 ```{r, LM3 in percentage, echo = FALSE}
-pander(round(prop.table(Q2.tbl.am, margin = 1)[4,]*100, digits=1))
+pander(round(prop.table(Q2.tbl.am, margin = 1)[3,]*100, digits=1))
 ```
 
 #### 식량자급률
@@ -91,33 +92,34 @@ pander(round(prop.table(Q2.tbl.am, margin = 1)[4,]*100, digits=1))
 ```{r, MTR, echo = FALSE}
 Q3.tbl.am <- addmargins(table(quiz1102$group, quiz1102$Q3, exclude = NULL), margin = 1)
 colnames(Q3.tbl.am)[5] <- "결석"
-rownames(Q3.tbl.am)[4] <- "계"
+rownames(Q3.tbl.am)[3] <- "계"
 pander(Q3.tbl.am[-3, ])
 ```
 
 ##### 우리나라 식량자급률 수준 (%)
 
 ```{r, MTRE in percentage, echo = FALSE}
-pander(round(prop.table(Q3.tbl.am, margin = 1)[4,]*100, digits = 1))
+pander(round(prop.table(Q3.tbl.am, margin = 1)[3, ] * 100, digits = 1))
 ```
 
 #### 국공립대 등록금 국제 비교
 
-이 질문은 THAAD배치 질문에서와 같이 배경 설명이 응답에 많은 영향을 미친다는 것을 보여줍니다. 국공립대학의 등록금이 무상인 나라들을 소개한 Red군에서는 적정 수준이 "무상"이라고 응답한 비율이 34%나 되는 반면에 국공립대학의 등록금이 우리나라보다 높거나 대등한 나라들의 예를 먼저 들고 적정 수준을 물어본 경우(Black)에는 "무상"에 응답한 비율이 4.4%에 불과한 것을 알 수 있습니다.
+이 질문은 THAAD배치 질문에서와 같이 배경 설명이 응답에 많은 영향을 미친다는 것을 보여줍니다.
+국공립대학의 등록금이 무상인 나라들을 소개한 Red군에서는 적정 수준이 "무상" 또는 100만원 이라고 이라고 응답한 비율이 78.3%로 국공립대학의 등록금이 우리나라보다 높거나 대등한 나라들의 예를 먼저 들고 적정 수준을 물어본 경우(Black)에 "무상" 또는 100만원이라고 응답한 비율인 33.3%보다 월등히 높은 것을 알 수 있습니다. 500만원 이상을 적정하다고 응답한 비율이 Red 집단에는 4.3%밖에 없지만 Black 집단에는 7.7%나 되는 점도 마찬가지 이유에서 입니다.
 
 ##### 국공립대 등록금의 적정 수준
 
 ```{r, college tuition, echo = FALSE}
 Q4.tbl.am <- addmargins(table(quiz1102$group, quiz1102$Q4, exclude = NULL), margin = 1)
 colnames(Q4.tbl.am)[6] <- "결석"
-rownames(Q4.tbl.am)[4] <- "계"
+rownames(Q4.tbl.am)[3] <- "계"
 pander(Q4.tbl.am[-3, ])
 ```
 
 ##### 국공립대 등록금의 적정 수준 (%)
 
 ```{r, college tuition in percentage, echo = FALSE}
-pander(round(prop.table(Q4.tbl.am, margin = 1)[-(3:4), ]*100, digits = 1))
+pander(round(prop.table(Q4.tbl.am[, -6], margin = 1)[-(3:4), ]*100, digits = 1))
 ```
 
 <!--

@@ -1,6 +1,3 @@
-# str(BFI.strsplit)
-# BFI.first <- mapply(function(x) sapply(x, substr, 1, 1), BFI.strsplit)
-# BFI.str.collapse <- mapply(function(x) paste(x, sep ="", collapse = ""), BFI.strsplit)
 # BFI.replies <- mapply(function(x) substring(x, first = c(1, 4, 7, 10, 13), last = c(1, 4, 7, 10, 13)), BFI.str.collapse)
 BFI.ans <- strsplit("개방성,성실성,외향성,친화성,신경성", split = ",")
 BFI.count <- mapply(function(x) ifelse(x == unlist(BFI.ans), 1, 0), BFI.strsplit)
@@ -321,192 +318,195 @@ pander(tbl.wrong_diff, caption = "이 사람들은 나하고 생각이")
 pander(paste.p(tbl.wrong.diff))
 pander(paste.p(tbl.wrong_diff))
 setwd("~/Google 드라이브/Works/Class/Statistics/R.WD/Class_data/class201602/R")
-library(xlsx)
-library(pander)
-library(knitr)
-panderOptions('table.split.table', Inf)
-panderOptions('table.alignment.rownames', 'left')
-panderOptions('table.alignment.default', 'right')
-options(width = 180)
-quiz1128 <- read.xlsx("../data/quiz1128.xlsx", 1, startRow = 2, endRow = 97, colIndex = c(3:7, 9:20), colClasses = rep("character", 17), header = TRUE, stringsAsFactors = FALSE)
-setwd("~/Google 드라이브/Works/Class/Statistics/R.WD/Class_data/class201602/R")
-quiz1128 <- read.xlsx("../data/quiz1128.xlsx", 1, startRow = 2, endRow = 97, colIndex = c(3:7, 9:20), colClasses = rep("character", 17), header = TRUE, stringsAsFactors = FALSE)
-str(quiz1128)
-names(quiz1128) <- c("dept", "id", "name", "year", "e.mail", "cell.no", "Team", paste("Q", 1:10, sep = ""))
-quiz1128$dept <- factor(quiz1128$dept)
-quiz1128$year <- factor(quiz1128$year)
-Team <- quiz1128$Team
-team.names <- unique(Team)
-na.index <- which(is.na(Team))
-quiz1128.2 <- quiz1128[-na.index, ]
-Team.2 <- quiz1128.2$Team
-team.names.2 <- unique(Team.2)
-score <- function(x) {
-switch(x,
-MM = c(-3, -3),
-MW = c(6, -6),
-WM = c(-6, 6),
-WW = c(3, 3))
+library(Rfacebook)
+library(Rook)
+library(qdap)
+fb_oauth <- fbOAuth(app_id="1241897489200219", app_secret="7c7e9f2041f6ed04ff989cd061691f2b",extended_permissions=TRUE)
+#load("FBoauth")
+me <- getUsers("me", token=fb_oauth)
+me
+pgData <- getPage("stat.in.life", token=fb_oauth, since="2016/08/30", until="2016/12/12")
+si <- subset(pgData, comments_count > 1)
+nop <- length(si$id)
+nop
+si$id
+pgData
+pgData <- getPage("stat.in.life", token=fb_oauth, since="2016/08/30", until="2016/12/12")
+pgData1 <- getPage("stat.in.life", token=fb_oauth, since="2016/08/30", until="2016/09/30")
+pgData2 <- getPage("stat.in.life", token=fb_oauth, since="2016/10/01", until="2016/10/31")
+pgData3 <- getPage("stat.in.life", token=fb_oauth, since="2016/11/01", until="2016/11/30")
+pgData4 <- getPage("stat.in.life", token=fb_oauth, since="2016/12/01", until="2016/12/12")
+si1 <- subset(pgData1, comments_count > 1)
+si2 <- subset(pgData2, comments_count > 1)
+si3 <- subset(pgData3, comments_count > 1)
+si4 <- subset(pgData4, comments_count > 1)
+si <- rbind(si1, si2, si3, si4)
+pgData1 <- getPage("stat.in.life", token=fb_oauth, since="2016/08/30", until="2016/09/30")
+pgData2 <- getPage("stat.in.life", token=fb_oauth, since="2016/10/01", until="2016/10/31")
+pgData3 <- getPage("stat.in.life", token=fb_oauth, since="2016/11/01", until="2016/11/15")
+pgData4 <- getPage("stat.in.life", token=fb_oauth, since="2016/11/16", until="2016/12/12")
+si1 <- subset(pgData1, comments_count > 1)
+si2 <- subset(pgData2, comments_count > 1)
+si3 <- subset(pgData3, comments_count > 1)
+si4 <- subset(pgData4, comments_count > 1)
+si <- rbind(si1, si2, si3, si4)
+si
+si1 <- subset(pgData1, comments_count > 2)
+si2 <- subset(pgData2, comments_count > 2)
+si3 <- subset(pgData3, comments_count > 2)
+si4 <- subset(pgData4, comments_count > 2)
+si <- rbind(si1, si2, si3, si4)
+si
+nop <- length(si$id)
+rownames(si) <- 1:nop
+si
+comments <- data.frame(from_id=NULL, from_name=NULL, meaage=NULL, post_id=NULL)
+for(i in 1:nop) {
+tmp <- getPost(si$id[i], token=fb_oauth, comments=TRUE)
+## post id
+post.id <- tmp$post$id
+## user id : comments
+##  comments.user <- tmp$comments$from_id
+##  comments.name <- tmp$comments$from_name
+##  comments.message <- tmp$comments$message
+tmp2 <- tmp$comments[, c("from_id", "from_name", "message")]
+tmp2$post_id <- rep(post.id, nrow(tmp2))
+comments <- rbind(comments, tmp2)
 }
-str(quiz1128.2)
-records <- quiz1128.2[, 10:20]
-records <- quiz1128.2[, 7:17]
-records
-records[records$Team == "지니", -1]
-sapply(records[records$Team == "지니", -1], score)
-sapply(records[records$Team == "지니", -1], paste, collpase = "")
-records <- quiz1128.2[, 7:17]
-sample.coll <- sapply(records[Team.2 == "지니", -1], paste, collapse = "")
-score <- function(x) {
-switch(x,
-MM = c(-3, -3),
-MW = c(6, -6),
-WM = c(-6, 6),
-WW = c(3, 3))
+str(comments)
+si
+sum(si$comments_count)
+str(comments)
+comments$wc <- word_count(comments$message)
+table(comments$from_name)
+tapply(comments$wc, comments$from_name, mean)
+table(comments$from_name)
+si
+si1 <- subset(pgData1, comments_count > 42)
+si2 <- subset(pgData2, comments_count > 42)
+si3 <- subset(pgData3, comments_count > 42)
+si4 <- subset(pgData4, comments_count > 42)
+si <- rbind(si1, si2, si3, si4)
+nop <- length(si$id)
+rownames(si) <- 1:nop
+comments <- data.frame(from_id=NULL, from_name=NULL, meaage=NULL, post_id=NULL)
+for(i in 1:nop) {
+tmp <- getPost(si$id[i], token=fb_oauth, comments=TRUE)
+## post id
+post.id <- tmp$post$id
+## user id : comments
+##  comments.user <- tmp$comments$from_id
+##  comments.name <- tmp$comments$from_name
+##  comments.message <- tmp$comments$message
+tmp2 <- tmp$comments[, c("from_id", "from_name", "message")]
+tmp2$post_id <- rep(post.id, nrow(tmp2))
+comments <- rbind(comments, tmp2)
 }
-sapply(sample.coll, score)
-sample.coll
-for(x in team.names.2)
-sapply(records[Team.2 == x, -1], paste, collapse = "")
-x
-for(x in team.names.2) {
-sapply(records[Team.2 == x, -1], paste, collapse = "")
+sum(si$comments_count)
+str(comments)
+si
+tmp
+str(comments)
+table(comments$post_id)
+table(comments$from_name, comments$post_id)
+si
+str(comments)
+tmp
+comments <- data.frame(from_id=NULL, from_name=NULL, message=NULL, created_time=NULL, post_id=NULL, post_time=NULL)
+for(i in 1:nop) {
+tmp <- getPost(si$id[i], token=fb_oauth, comments=TRUE)
+## post id
+post.id <- tmp$post$id
+post.id <- tmp$post$created_time
+## user id : comments
+##  comments.user <- tmp$comments$from_id
+##  comments.name <- tmp$comments$from_name
+##  comments.message <- tmp$comments$message
+tmp2 <- tmp$comments[, c("from_id", "from_name", "message", "created_time")]
+tmp2$post_id <- rep(post.id, nrow(tmp2))
+tmp2$post_time <- rep(post.id, nrow(tmp2))
+comments <- rbind(comments, tmp2)
 }
-team.names.2
-sapply(records[Team.2 %in% team.names.2, -1], paste, collapse = "")
-sapply(records[, -1], paste, collapse = "")
-for(x in team.names.2) {
-u <- sapply(records[Team.2 == x, -1], paste, collapse = "")
+sum(si$comments_count)
+str(comments)
+head(comments)
+comments <- data.frame(from_id=NULL, from_name=NULL, message=NULL, created_time=NULL, post_id=NULL, post_time=NULL)
+for(i in 1:nop) {
+tmp <- getPost(si$id[i], token=fb_oauth, comments=TRUE)
+## post id
+post.id <- tmp$post$id
+post.time <- tmp$post$created_time
+## user id : comments
+##  comments.user <- tmp$comments$from_id
+##  comments.name <- tmp$comments$from_name
+##  comments.message <- tmp$comments$message
+tmp2 <- tmp$comments[, c("from_id", "from_name", "message", "created_time")]
+tmp2$post_id <- rep(post.id, nrow(tmp2))
+tmp2$post_time <- rep(post.time, nrow(tmp2))
+comments <- rbind(comments, tmp2)
 }
-u
-u <- NULL
-for(x in team.names.2) {
-u <- rbind(u, sapply(records[Team.2 == x, -1], paste, collapse = ""))
+str(comments)
+head(comments)
+?gsub
+gsub("T", " ", comments$created_time)
+gsub("\+0000", "", comments$created_time)
+gsub("+0000", "", comments$created_time)
+gsub("\+0000", "", comments$created_time)
+gsub("+0000", "", comments$created_time)
+gsub("[+]0000", "", comments$created_time)
+gsub("T|[+]0000", " ", comments$created_time)
+comments$created_time <- gsub("T", " ", comments$created_time)
+comments$created_time <- gsub("[+]0000", "", comments$created_time)
+comments$post_time <- gsub("T", " ", comments$post_time)
+comments$post_time <- gsub("[+]0000", "", comments$created_time)
+as.Date(comments$created_time)
+as.Datetime(comments$created_time)
+?as.Date
+?as.POSIXct.Date
+as.date
+as.Date.POSIXlt(comments$created_time)
+?as.Date.POSIXlt
+?timediff
+?time.diff
+??timediff
+?difftime
+timediff(comments$created_time - comments$post_time)
+difftime(comments$created_time - comments$post_time)
+difftime(comments$created_time, comments$post_time)
+as.POSIXct(comments$created_time)
+comments$created_time <-as.POSIXct(comments$created_time)
+comments <- data.frame(from_id=NULL, from_name=NULL, message=NULL, created_time=NULL, post_id=NULL, post_time=NULL)
+for(i in 1:nop) {
+tmp <- getPost(si$id[i], token=fb_oauth, comments=TRUE)
+## post id
+post.id <- tmp$post$id
+post.time <- tmp$post$created_time
+## user id : comments
+##  comments.user <- tmp$comments$from_id
+##  comments.name <- tmp$comments$from_name
+##  comments.message <- tmp$comments$message
+tmp2 <- tmp$comments[, c("from_id", "from_name", "message", "created_time")]
+tmp2$post_id <- rep(post.id, nrow(tmp2))
+tmp2$post_time <- rep(post.time, nrow(tmp2))
+comments <- rbind(comments, tmp2)
 }
-u
-str(u)
-rownames(u) <- team.names.2
-u
-records.coll <- NULL
-for(x in team.names.2) {
-records.coll <- rbind(records.coll, sapply(records[Team.2 == x, -1], paste, collapse = ""))
-}
-rownames(records.coll) <- team.names.2
-records.coll
-sapply(records.coll[1, ], score)
-score.coll <- NULL
-for(x in team.names.2) {}
-for(x in team.names.2) {
-score.coll <- rbind(score.coll, sapply(records.coll[rownames(records.coll) == x, ], score))
-}
-score.coll
-rownames(score.coll) <- rep(rownames(records.coll), each = 2)
-score.coll
-team.names.2
-?order
-records
-records[order(team.names.2), ]
-records[order(team.names.2, decreasing = TRUE), ]
-records.coll
-score.coll <- NULL
-for(x in team.names.2) {
-score.coll <- rbind(score.coll, sapply(records.coll[rownames(records.coll) == x, ], score))
-}
-score.coll
-ls()
-reorder(quiz1128$id, quiz1128$Team)
-reorder(quiz1128$id, quiz1128$name)
-warnings()
-score.coll
-rownames(score.coll) <- rep(rownames(records.coll), each = 2)
-score.coll
-sample.coll <- sapply(records[Team.2 == "지니", -1], paste, collapse = "")
-sample.coll
-records[Team.2 == "지니", -1]
-rownames(records[Team.2 == "지니", -1])
-records[c(51, 95),]
-records
-setwd("~/Google 드라이브/Works/Class/Statistics/R.WD/Class_data/class201602/R")
-library(xlsx)
-library(knitr)
-library(pander)
-panderOptions("table.split.table", Inf)
-total <- read.xlsx(file = "../data/scoreList.xlsx", sheetIndex = 1, rowIndex = 3:98, colIndex = 2:8, colClasses = c(rep("character", 2), rep("numeric", 5)), header = TRUE)
-total <- total[c(2, 1, 4:7, 3)]
-total <- total[c(2, 1, 7, 5, 4, 6, 3)]
-v.names.total <- c("ID", "Name", "Offline", "Online", "Assignment", "Facebook", "Total")
-names(total) <- v.names.total
-N <- nrow(total)
-total$Ranks <- N + 1 - rank(total$Total)
-total$Grades <- ifelse(total$Ranks <= floor(N*0.3), "A+", ifelse(total$Ranks <= floor(N*0.6), "B+", "C+"))
-kable(total)
-total <- read.xlsx(file = "../data/scoreList.xlsx", sheetIndex = 1, rowIndex = 3:98, colIndex = 2:8, colClasses = c(rep("character", 2), rep("numeric", 5)), header = TRUE)
-total <- total[c(2, 1, 7, 5, 4, 6, 3)]
-v.names.total <- c("ID", "Name", "Offline", "Online", "Assignment", "Facebook", "Total")
-names(total) <- v.names.total
-N <- nrow(total)
-total$Ranks <- N + 1 - rank(total$Total)
-total$Grades <- ifelse(total$Ranks <= floor(N*0.3), "A+", ifelse(total$Ranks <= floor(N*0.6), "B+", "C+"))
-kable(total)
-95*0.3
-95*0.6
-95*0.6
-21*.4
-72*0.6
-install.packages("xlsx")
-install.packages("xlsxjars")
-knitr::opts_chunk$set(echo = TRUE)
-# install.packages("pander", repos = "https://cran.rstudio.com")
-# install.packages("xlsx", repos = "https://cran.rstudio.com")
-library(xlsx)
-library(pander)
-library(knitr)
-panderOptions('table.split.table', Inf)
-panderOptions('table.alignment.rownames', 'left')
-panderOptions('table.alignment.default', 'right')
-options(width = 180)
-quiz1102 <- read.xlsx("../data/quiz1102.xlsx", 1, startRow = 2, endRow = 97, colIndex = c(3:7, 9:14), colClasses = c(rep("character", 11)), stringsAsFactors = FALSE)
-str(quiz1102)
-names(quiz1102) <- c("dept", "id", "name", "year", "e.mail", "cell.no", "Q1", "Q2", "Q3", "Q4", "group")
-quiz1102$dept <- factor(quiz1102$dept)
-quiz1102$year <- factor(quiz1102$year)
-quiz1102$group <- factor(quiz1102$group, levels = c("Red", "Black"))
-quiz1102$Q1 <- factor(quiz1102$Q1, levels = c("가", "나", "다", "라"), labels = c("생산성 향상 < 임금 향상", "고소득층 소득 > 중산층 이하 소득", "중산층 이하 소득 > 고소득층 소득", "평균 임금 증가율 < 중위 임금 증가율"))
-quiz1102$Q2 <- factor(quiz1102$Q2, levels = c("가", "나", "다", "라"), labels = c("10억", "20억", "25억", "30억"))
-quiz1102$Q3 <- factor(quiz1102$Q3, levels = c("가", "나", "다", "라"), labels = c("100%", "75%", "50%", "25%"))
-quiz1102$Q4 <- factor(quiz1102$Q4, levels = c("가", "나", "다", "라", "ㅁㅏ"), labels = c("무상", "100만원", "200만원", "500만원", "1,000만원"))
-# quiz1102$Q4.2[quiz1102$group == "Black" & quiz1102$Q4.2 == "나"] <- "하야"
-# quiz1102$Q4.2[quiz1102$group == "Black" & quiz1102$Q4.2 == "다"] <- "탄핵"
-# quiz1102$Q4.2[quiz1102$group == "Black" & quiz1102$Q4.2 == "라"] <- "모르겠다"
-# quiz1102$Q4.2[quiz1102$group == "Black" & quiz1102$Q4.2 == "조퇴"] <- "조퇴"
-# quiz1102$Q4.2[quiz1102$group == "Red" & quiz1102$Q4.2 == "가"] <- "탄핵"
-# quiz1102$Q4.2[quiz1102$group == "Red" & quiz1102$Q4.2 == "나"] <- "하야"
-# quiz1102$Q4.2[quiz1102$group == "Red" & quiz1102$Q4.2 == "다"] <- "아니다"
-# quiz1102$Q4.2[quiz1102$group == "Red" & quiz1102$Q4.2 == "라"] <- "모르겠다"
-# quiz1102$Q4.2[quiz1102$group == "Red" & quiz1102$Q4.2 == "조퇴"] <- "조퇴"
-# quiz1102$Q4.2 <- factor(quiz1102$Q4.2, levels = c("탄핵", "하야", "아니다", "모르겠다", "조퇴"))
-str(quiz1102)
-Q1.tbl.am <- addmargins(table(quiz1102$group, quiz1102$Q1, exclude = NULL), margin = 1)
-colnames(Q1.tbl.am)[5] <- "결석"
-rownames(Q1.tbl.am)[4] <- "계"
-rownames(Q1.tbl.am)[3] <- "계"
-pander(Q1.tbl.am[-3, ])
-pander(round(prop.table(Q1.tbl.am, margin = 1)[4, ]*100, digits = 1))
-pander(round(prop.table(Q1.tbl.am, margin = 1)[3, ]*100, digits = 1))
-Q2.tbl.am <- addmargins(table(quiz1102$group, quiz1102$Q2, exclude = NULL), margin = 1)
-colnames(Q2.tbl.am)[5] <- "결석"
-rownames(Q2.tbl.am)[3] <- "계"
-pander(Q2.tbl.am[-3, ])
-pander(round(prop.table(Q2.tbl.am, margin = 1)[3,]*100, digits=1))
-Q3.tbl.am <- addmargins(table(quiz1102$group, quiz1102$Q3, exclude = NULL), margin = 1)
-colnames(Q3.tbl.am)[5] <- "결석"
-rownames(Q3.tbl.am)[4] <- "계"
-rownames(Q3.tbl.am)[3] <- "계"
-pander(Q3.tbl.am[-3, ])
-pander(round(prop.table(Q3.tbl.am, margin = 1)[4,]*100, digits = 1))
-pander(round(prop.table(Q3.tbl.am, margin = 1)[3, ] * 100, digits = 1))
-Q4.tbl.am <- addmargins(table(quiz1102$group, quiz1102$Q4, exclude = NULL), margin = 1)
-colnames(Q4.tbl.am)[6] <- "결석"
-rownames(Q4.tbl.am)[3] <- "계"
-pander(Q4.tbl.am[-3, ])
-pander(round(prop.table(Q4.tbl.am[, -6], margin = 1)[-(3:4), ]*100, digits = 1))
+str(comments)
+head(comments)
+sum(si$comments_count)
+str(comments)
+#time
+comments$created_time <- gsub("T", " ", comments$created_time)
+comments$created_time <- gsub("[+]0000", "", comments$created_time)
+comments$post_time <- gsub("T", " ", comments$post_time)
+comments$post_time <- gsub("[+]0000", "", comments$post_time)
+comments$created_time <-as.POSIXct(comments$created_time)
+comments$post_time <-as.POSIXct(comments$post_time)
+difftime(comments$created_time, comments$post_time)
+difftime(comments$created_time, comments$post_time) /24
+floor(difftime(comments$created_time, comments$post_time) /24)
+floor(difftime(comments$created_time, comments$post_time) /24) <= 30
+comments$timediff <- floor(difftime(comments$created_time, comments$post_time) /24)
+comments
+table(comments$from_name)
+table(comments$post_id)
+table(comments$from_name, comments$post_id)
