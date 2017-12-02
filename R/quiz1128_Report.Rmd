@@ -1,7 +1,7 @@
 ---
-title: "Quiz 161128"
+title: "MW Game 161128"
 author: "coop711"
-date: "`r Sys.Date()`"
+date: "2016-11-28"
 output: html_document
 ---
 
@@ -18,12 +18,21 @@ panderOptions('table.alignment.default', 'right')
 options(width = 180)
 ```
 
-### Data 
+### 개별 기록
 
 ```{r, data, echo = FALSE, results = 'markup'}
-quiz1128 <- read.xlsx("../data/quiz1128.xlsx", 1, startRow = 2, endRow = 97, colIndex = c(3:7, 9:20), colClasses = rep("character", 17), header = TRUE, stringsAsFactors = FALSE)
+quiz1128 <- read.xlsx("../data/quiz1128.xlsx", 
+                      sheetIndex = 1, 
+                      startRow = 2, 
+                      endRow = 97, 
+                      colIndex = c(3:7, 9:20), 
+                      colClasses = rep("character", 17), 
+                      header = TRUE, 
+                      stringsAsFactors = FALSE)
 # str(quiz1128)
-names(quiz1128) <- c("dept", "id", "name", "year", "e.mail", "cell.no", "Team", paste("Q", 1:10, sep = ""))
+names(quiz1128) <- c("dept", "id", "name", "year", "e.mail", "cell.no", "Team", 
+                     paste("Q", 1:10, 
+                           sep = ""))
 quiz1128$dept <- factor(quiz1128$dept)
 quiz1128$year <- factor(quiz1128$year)
 Team <- quiz1128$Team
@@ -33,7 +42,14 @@ quiz1128.2 <- quiz1128[-na.index, ]
 Team.2 <- quiz1128.2$Team
 team.names.2 <- unique(Team.2)
 records <- quiz1128.2[, 7:17]
-kable(quiz1128.2[, c("id", "name","Team", paste("Q", 1:10, sep = ""))])
+kable(quiz1128.2[, c("id", "name","Team", 
+                     paste("Q", 1:10, 
+                           sep = ""))])
+```
+
+### 팀별 기록
+
+```{r, echo = FALSE}
 # sample.coll <- sapply(records[Team.2 == "지니", -1], paste, collapse = "")
 score <- function(x) {
   switch(x,
@@ -45,10 +61,18 @@ score <- function(x) {
 # sapply(sample.coll, score)
 records.coll <- NULL
 for(x in team.names.2) {
-records.coll <- rbind(records.coll, sapply(records[Team.2 == x, -1], paste, collapse = ""))
+  records.coll <- rbind(records.coll, 
+                        sapply(records[Team.2 == x, -1], 
+                               paste, 
+                               collapse = ""))
 }
 rownames(records.coll) <- team.names.2
 kable(records.coll)
+```
+
+### 팀별 점수
+
+```{r, echo = FALSE}
 score.coll <- NULL
 for(x in team.names.2) {
 score.coll <- rbind(score.coll, sapply(records.coll[rownames(records.coll) == x, ], score))
@@ -58,12 +82,50 @@ rownames(score.coll) <- rep(rownames(records.coll), each = 2)
 kable(score.coll)
 id.name <- NULL
 for(x in team.names.2) {
-id.name <- rbind(id.name, quiz1128.2[Team.2 == x, c("id", "name")])
+  id.name <- rbind(id.name, 
+                   quiz1128.2[Team.2 == x, 
+                              c("id", "name")])
 }
-result.df <- data.frame(id.name, Team = rownames(score.coll), score.coll)
+result.df <- data.frame(id.name, 
+                        Team = rownames(score.coll), 
+                        score.coll)
 result.df$sum <- rowSums(result.df[, 4:13])
-names(result.df) <- c("학번", "이름", "팀", paste(1:10, "회차", sep = ""), "총점")
+names(result.df) <- c("학번", "이름", "팀", 
+                      paste(1:10, "회차", 
+                            sep = ""), "총점")
+#> 팀 점수 계산
+team_scores <- tapply(result.df$"총점", result.df$"팀", sum)
+#> 협동이 잘 이루어진 팀과 그러지 못한 팀 파악
+best_names <- names(which(team_scores == 60))
+good_names <- names(which(team_scores >= 48 & team_scores < 60))
+worst_names <- names(which(team_scores <= -30))
+```
+
+### 팀별 점수 집계
+
+```{r, echo= FALSE}
 kable(result.df)
+```
+
+###  협동이 매우 잘된 팀
+
+```{r, echo = FALSE}
+#> Best team scores
+kable(result.df[result.df$"팀" %in% best_names, ]) 
+```
+
+### 협동이 비교적 잘된 팀 (팀점수 48점 이상)
+
+```{r, echo = FALSE}
+#> Team scores higher than 48
+kable(result.df[result.df$"팀" %in% good_names, ]) 
+```
+
+### 협동이 잘 안되는 팀 (팀 점수 -30점 이하)
+
+```{r, echo = FALSE}
+#> Worst team scores
+kable(result.df[result.df$"팀" %in% worst_names, ]) 
 # str(quiz1128)
 ```
 

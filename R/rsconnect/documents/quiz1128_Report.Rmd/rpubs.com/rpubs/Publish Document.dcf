@@ -1,8 +1,10 @@
 name: Publish Document
 title:
+username:
 account: rpubs
 server: rpubs.com
+hostUrl: rpubs.com
 appId: https://api.rpubs.com/api/v1/document/232132/9986a325c946438ebe78c4c62d1fbdd7
 bundleId: https://api.rpubs.com/api/v1/document/232132/9986a325c946438ebe78c4c62d1fbdd7
-url: http://rpubs.com/publish/claim/232132/8b95e97e5f5d43d292d972419e431e4f
-when: 1480609182.67006
+url: http://rpubs.com/kwlee58/232132
+when: 1512229562.62656
