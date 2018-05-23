@@ -1,7 +1,7 @@
 ---
-title: "Quiz 161107"
+title: "Quiz 161107 : Framing Effects"
 author: "coop711"
-date: "`r Sys.Date()`"
+date: "2016-11-07"
 output: html_document
 ---
 
@@ -36,8 +36,9 @@ Red <- quiz1107$group == "Red"
 # quiz1107$Q4.2[quiz1107$group == "Red" & quiz1107$Q4 == "가"] <- "200명은 살린다"
 # quiz1107$Q4.2[quiz1107$group == "Red" & quiz1107$Q4 == "나"] <- "모두 살릴 확률 1/3"
 # quiz1107$Q4.2 <- quiz1107$Q4
-quiz1107$Q4.2[Red] <- ifelse(quiz1107$Q4[Red] == "가", "200명/400명", ifelse(quiz1107$Q4[Red] == "나", "확률 1/3", NA))
-quiz1107$Q4.2[Black] <- ifelse(quiz1107$Q4[Black] == "가", "200명/400명", ifelse(quiz1107$Q4[Black] == "나", "확률 1/3", NA))
+quiz1107$Q4.2[Red] <- ifelse(quiz1107$Q4[Red] == "가", "확실히", ifelse(quiz1107$Q4[Red] == "나", "확률적으로", NA))
+quiz1107$Q4.2[Black] <- ifelse(quiz1107$Q4[Black] == "가", "확실히", ifelse(quiz1107$Q4[Black] == "나", "확률적으로", NA))
+quiz1107$Q4.2 <- factor(quiz1107$Q4.2, levels = c("확실히", "확률적으로"))
 str(quiz1107)
 ```
 
@@ -54,14 +55,14 @@ pander(summary(quiz1107))
 ```{r, bystander, echo = FALSE}
 Q1.tbl.am <- addmargins(table(quiz1107$group, quiz1107$Q1, exclude = NULL), margin = 1)
 colnames(Q1.tbl.am)[5] <- "결석"
-rownames(Q1.tbl.am)[4] <- "계"
+rownames(Q1.tbl.am)[3] <- "계"
 pander(Q1.tbl.am[-3, ])
 ```
 
 ##### 방관자 효과(%)
 
 ```{r, bystander in percentage, echo = FALSE}
-pander(round(prop.table(Q1.tbl.am, margin = 1)[4, ]*100, digits = 1))
+pander(round(prop.table(Q1.tbl.am, margin = 1)[3, ]*100, digits = 1))
 ```
 
 #### Stanley Milgram
@@ -71,14 +72,14 @@ pander(round(prop.table(Q1.tbl.am, margin = 1)[4, ]*100, digits = 1))
 ```{r, obedience, echo = FALSE}
 Q2.tbl.am <- addmargins(table(quiz1107$group, quiz1107$Q2, exclude = NULL), margin = 1)
 colnames(Q2.tbl.am)[5] <- "결석"
-rownames(Q2.tbl.am)[4] <- "계"
+rownames(Q2.tbl.am)[3] <- "계"
 pander(Q2.tbl.am[-3, ])
 ```
 
 ##### 450V까지 누르는 사람 (%)
 
 ```{r, obedience in percentage, echo = FALSE}
-pander(round(prop.table(Q2.tbl.am, margin = 1)[4,]*100, digits=1))
+pander(round(prop.table(Q2.tbl.am, margin = 1)[3,]*100, digits=1))
 ```
 
 #### Solomon Asch
@@ -88,14 +89,14 @@ pander(round(prop.table(Q2.tbl.am, margin = 1)[4,]*100, digits=1))
 ```{r, Power of 3, echo = FALSE}
 Q3.tbl.am <- addmargins(table(quiz1107$group, quiz1107$Q3, exclude = NULL), margin = 1)
 colnames(Q3.tbl.am)[5] <- "결석"
-rownames(Q3.tbl.am)[4] <- "계"
+rownames(Q3.tbl.am)[3] <- "계"
 pander(Q3.tbl.am[-3, ])
 ```
 
 ##### Power of 3 (%)
 
 ```{r, Power of 3 in percentage, echo = FALSE}
-pander(round(prop.table(Q3.tbl.am, margin = 1)[4,]*100, digits = 1))
+pander(round(prop.table(Q3.tbl.am, margin = 1)[3, ]*100, digits = 1))
 ```
 
 ### Framing Effect
@@ -105,8 +106,8 @@ pander(round(prop.table(Q3.tbl.am, margin = 1)[4,]*100, digits = 1))
 ##### 600명 중 200명이 사는 거나 400명이 죽는 것, 모두 살리는 거나 모두 죽지 않는 것이나 같은 내용임에도 반응이 다르게 나타남에 유의. 손실회피 경향과 같은 현상을 관찰할 수 있음.
 
 ```{r, Framing Effect, echo = FALSE}
-tbl <- table(quiz1107$group, quiz1107$Q4.2, exclude = NULL)
-rownames(tbl) <- c("Red(산다, 모두 살릴)", "Black(죽는다, 모두 죽지 않을)", "결석")
+tbl <- table(quiz1107$group, quiz1107$Q4.2, useNA = "ifany")
+rownames(tbl) <- c("생존 프레임", "사망 프레임")
 colnames(tbl)[3] <- "결석"
 kable(tbl[1:2, ], caption = "Framing Effect")
 ```

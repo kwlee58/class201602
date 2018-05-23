@@ -1,7 +1,7 @@
 ---
 title: "Quiz 161116"
 author: "coop711"
-date: "`r Sys.Date()`"
+date: "2016-11-23"
 output: html_document
 ---
 
@@ -123,10 +123,11 @@ pander(chisq.test(table(matching.score), p = c(9, 8, 6, 1)/24, simulate.p.value 
 실업률이 10%인 것과 취업률이 90%인 것이 동등함에도 불구하고, 실업률과 인플레가 나오면 실업률이 낮아지는 정책을 선호하고 취업률과 인플레가 나오면 인플레가 낮아지는 정책을 선호함에 유의.
 
 ```{r, Framing Effect, echo = FALSE}
-tbl.q3 <- table(quiz1116$group, quiz1116$Q3.2, exclude = NULL)
-rownames(tbl.q3) <- c("Red(실업률 관점)", "Black(취업률 관점)", "NA")
+tbl.q3 <- table(quiz1116$group, quiz1116$Q3.2, useNA = "ifany")
+rownames(tbl.q3) <- c("Red(실업률 관점)", "Black(취업률 관점)")
 colnames(tbl.q3)[3] <- "결석"
 kable(tbl.q3[1:2, ], caption = "Framing Effect")
+pander(chisq.test(tbl.q3[1:2, 1:2]))
 ```
 
 ##### % 비교.  
@@ -144,10 +145,11 @@ kable(tbl.q3.p.a)
 인플레 없이 7%를 삭감하는 것과 12% 인플레 상황에서 5%임금 인상은 동등한 조건인데도 '임금인상'이라는 말에 '수용가능하다'는 응답 비율이 늘어남에 유의.
 
 ```{r, Money illusion, echo = FALSE}
-tbl.q4 <- table(quiz1116$group, quiz1116$Q4.2, exclude = NULL)
-rownames(tbl.q4) <- c("Red(인플레0%, 임금삭감7%)", "Black(인플레12%, 임금인상5%)", "NA")
+tbl.q4 <- table(quiz1116$group, quiz1116$Q4.2, useNA = "ifany")
+rownames(tbl.q4) <- c("Red(인플레0%, 임금삭감7%)", "Black(인플레12%, 임금인상5%)")
 colnames(tbl.q4)[3] <- "결석"
 kable(tbl.q4[1:2, ], caption = "화폐 착각")
+pander(chisq.test(tbl.q4[1:2, 1:2]))
 ```
 
 ##### % 비교.  
