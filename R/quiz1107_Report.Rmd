@@ -12,6 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(xlsx)
 library(pander)
 library(knitr)
+library(magrittr)
 panderOptions('table.split.table', Inf)
 panderOptions('table.alignment.rownames', 'left')
 panderOptions('table.alignment.default', 'right')
@@ -28,17 +29,8 @@ quiz1107$group <- factor(quiz1107$group, levels = c("Red", "Black"))
 quiz1107$Q1 <- factor(quiz1107$Q1, levels = c("가", "나", "다", "라"), labels = c("열에 한명", "열에 세명", "열에 다섯명", "열에 여덟명"))
 quiz1107$Q2 <- factor(quiz1107$Q2, levels = c("가", "나", "다", "라"), labels = c("15%", "25%", "45%", "65%"))
 quiz1107$Q3 <- factor(quiz1107$Q3, levels = c("가", "나", "다", "라"), labels = c("1명", "2명", "3명", "4명"))
-# quiz1107$Q4.2 <- quiz1107$Q4
-Black <- quiz1107$group == "Black"
-Red <- quiz1107$group == "Red"
-# quiz1107$Q4.2[quiz1107$group == "Black" & quiz1107$Q4 == "가"] <- "400명은 죽는다"
-# quiz1107$Q4.2[quiz1107$group == "Black" & quiz1107$Q4 == "나"] <- "모두 사망 않을 확률 1/3"
-# quiz1107$Q4.2[quiz1107$group == "Red" & quiz1107$Q4 == "가"] <- "200명은 살린다"
-# quiz1107$Q4.2[quiz1107$group == "Red" & quiz1107$Q4 == "나"] <- "모두 살릴 확률 1/3"
-# quiz1107$Q4.2 <- quiz1107$Q4
-quiz1107$Q4.2[Red] <- ifelse(quiz1107$Q4[Red] == "가", "확실히", ifelse(quiz1107$Q4[Red] == "나", "확률적으로", NA))
-quiz1107$Q4.2[Black] <- ifelse(quiz1107$Q4[Black] == "가", "확실히", ifelse(quiz1107$Q4[Black] == "나", "확률적으로", NA))
-quiz1107$Q4.2 <- factor(quiz1107$Q4.2, levels = c("확실히", "확률적으로"))
+quiz1107$Q4 %<>% factor(levels = c("가", "나"),
+                        labels = c("확실히", "확률적으로"))
 str(quiz1107)
 ```
 
@@ -106,7 +98,7 @@ pander(round(prop.table(Q3.tbl.am, margin = 1)[3, ]*100, digits = 1))
 ##### 600명 중 200명이 사는 거나 400명이 죽는 것, 모두 살리는 거나 모두 죽지 않는 것이나 같은 내용임에도 반응이 다르게 나타남에 유의. 손실회피 경향과 같은 현상을 관찰할 수 있음.
 
 ```{r, Framing Effect, echo = FALSE}
-tbl <- table(quiz1107$group, quiz1107$Q4.2, useNA = "ifany")
+tbl <- table(quiz1107$group, quiz1107$Q4, useNA = "ifany")
 rownames(tbl) <- c("생존 프레임", "사망 프레임")
 colnames(tbl)[3] <- "결석"
 kable(tbl[1:2, ], caption = "Framing Effect")
