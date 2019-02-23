@@ -70,13 +70,22 @@ pander(quiz1116[c("Q3", "Q3.2", "Q4", "Q4.2", "group")])
 pander(summary(quiz1116))
 ```
 
-### 퀴즈 응답
+## 퀴즈 응답
 
-#### Birthday Problem
+### Birthday Problem
 
-##### 생일이 같은 사람은 몇 명?
+#### 생일이 같은 사람은 몇 명?
 
-$N$명 중에 생일이 같은 사람의 수는 대략 $\frac{N(N-1)}{365}$라고 기대된다. 89명 응답한 중에는 $\frac{89\times88}{365}=$ `r round(89*88/365, digits = 2)` 명 정도로 기대된다. 실제 값과 비교.
+$N$명 중에 생일이 같은 사람의 수는 대략 $\frac{N(N-1)}{365}$라고 기대된다. 89명 응답한 중에는 $\frac{89\times88}{365}=$ `r round(89*88/365, digits = 2)` 명 정도로 기대된다. 
+이때, 오차는 
+
+```{r, echo = FALSE}
+options(digits = 2)
+V_N <- function(N){N * (1 - (364 / 365) ^ (N - 1)) + N * (N - 1) * (1 - (363 / 365)) ^ (N - 2)}
+sqrt(V_N(89))
+```
+
+이다. 실제 관찰된 값과 비교.
 
 ```{r, birthday problem, echo = FALSE}
 # dup.b.df <- quiz1116[index.dup.b, c("id", "Q1.2", "group")]
@@ -88,7 +97,7 @@ names(tbl.dup.b.a)[11] <- "계"
 pander(tbl.dup.b.a)
 ```
 
-##### 태어난 달의 분포는?
+#### 태어난 달의 분포는?
 
 ```{r, month of the birthdates, echo = FALSE}
 birth_month.tbl <- table(quiz1116$group, "태어난 달" = birth_month.f)
@@ -98,9 +107,9 @@ colnames(birth_month.tbl.a)[14] <- "계"
 pander(birth_month.tbl.a)
 ```
 
-#### Matching Problem
+### Matching Problem
 
-##### 정답갯수의 분포
+#### 정답갯수의 분포
 
 ```{r, matching, echo = FALSE}
 matching.score.tbl <- table(quiz1116$group, "맞춘 갯수" = matching.score)
@@ -110,15 +119,15 @@ colnames(matching.score.tbl.a)[5] <- "계"
 pander(matching.score.tbl.a)
 ```
 
-##### 카이제곱 적합도 테스트
+#### 카이제곱 적합도 테스트
 
 ```{r, chisquare goodness of fit test, echo = FALSE}
 pander(chisq.test(table(matching.score), p = c(9, 8, 6, 1)/24, simulate.p.value = TRUE, B = 2000))
 ```
 
-#### Framing Effects
+### Framing Effects
 
-##### 인플레이션과 일자리 정책 패키지
+#### 인플레이션과 일자리 정책 패키지
 
 실업률이 10%인 것과 취업률이 90%인 것이 동등함에도 불구하고, 실업률과 인플레가 나오면 실업률이 낮아지는 정책을 선호하고 취업률과 인플레가 나오면 인플레가 낮아지는 정책을 선호함에 유의.
 
@@ -130,7 +139,7 @@ kable(tbl.q3[1:2, ], caption = "Framing Effect")
 pander(chisq.test(tbl.q3[1:2, 1:2]))
 ```
 
-##### % 비교.  
+#### % 비교.  
 
 ```{r, Framing effects in percentage, echo = FALSE}
 tbl.q3.p.a <- addmargins(round(prop.table(tbl.q3[1:2, -3], margin = 1)*100, digits = 1))[1:2, ]
@@ -138,9 +147,9 @@ colnames(tbl.q3.p.a)[3] <- "계"
 kable(tbl.q3.p.a)
 ```
 
-#### 화폐 착각
+### 화폐 착각
 
-##### 인플레이션과 임금인상
+#### 인플레이션과 임금인상
 
 인플레 없이 7%를 삭감하는 것과 12% 인플레 상황에서 5%임금 인상은 동등한 조건인데도 '임금인상'이라는 말에 '수용가능하다'는 응답 비율이 늘어남에 유의.
 
@@ -152,7 +161,7 @@ kable(tbl.q4[1:2, ], caption = "화폐 착각")
 pander(chisq.test(tbl.q4[1:2, 1:2]))
 ```
 
-##### % 비교.  
+#### % 비교.  
 
 ```{r, Money illusion in percentage, echo = FALSE}
 tbl.q4.p.a <- addmargins(round(prop.table(tbl.q4[1:2, -3], margin = 1)*100, digits = 1))[1:2, ]
